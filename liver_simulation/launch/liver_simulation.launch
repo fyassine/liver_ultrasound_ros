@@ -1,0 +1,71 @@
+<launch>
+  <!-- Arguments -->
+  <arg name="model" default="iiwa7"/>
+  <arg name="robot_name" default="iiwa"/>
+  <!-- Choose which hardware interface (PositionJointInterface | EffortJointInterface | VelocityJointInterface) is exported to Gazebo/ros_control -->
+  <arg name="hardware_interface" default="PositionJointInterface" />
+  <!-- Optional legacy override kept for compatibility with older usage -->
+  <arg name="trajectory_interface" default="" />
+  <!-- Whether to also load individual per-joint controllers (false keeps things lighter) -->
+  <arg name="load_single_joint" default="false" />
+
+  <!-- Gazebo world -->
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="world_name" value="$(find liver_simulation)/worlds/liver_sim.world"/>
+    <arg name="paused" value="false"/>
+    <arg name="use_sim_time" value="true"/>
+    <arg name="gui" value="true"/>
+    <arg name="headless" value="false"/>
+  </include>
+
+  <!-- Upload URDF (places robot_description param) -->
+  <include file="$(find iiwa_description)/launch/$(arg model)_upload.launch">
+    <arg name="hardware_interface" value="$(eval arg('trajectory_interface') if arg('trajectory_interface') else arg('hardware_interface'))"/>
+    <arg name="robot_name" value="$(arg robot_name)" />
+  </include>
+
+  <!-- Also push the URDF into the controller namespace so gazebo_ros_control can resolve it -->
+  <group ns="$(arg robot_name)">
+    <include file="$(find iiwa_description)/launch/$(arg model)_upload.launch">
+      <arg name="hardware_interface" value="$(eval arg('trajectory_interface') if arg('trajectory_interface') else arg('hardware_interface'))"/>
+      <arg name="robot_name" value="$(arg robot_name)" />
+    </include>
+  </group>
+
+  <!-- Spawn model at table pose -->
+  <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" output="screen"
+        args="-urdf -model $(arg robot_name) -param robot_description -x 1.0 -y -1.0 -z 0.8" />
+
+  <!-- Controllers namespace -->
+  <group ns="$(arg robot_name)">
+    <!-- PID tuner: provide gains for gazebo_ros_control to silence warnings when using effort-based controllers -->
+    <rosparam param="gazebo_ros_control/pid_gains">
+      iiwa_joint_1: {p: 500.0, i: 15.0, d: 30.0, i_clamp: 30.0}
+      iiwa_joint_2: {p: 200.0, i: 10.0, d: 10.0, i_clamp: 30.0}
+      iiwa_joint_3: {p: 65.0,  i: 15.0, d: 10.0, i_clamp: 30.0}
+      iiwa_joint_4: {p: 31.0,  i: 12.0, d: 7.0,  i_clamp: 30.0}
+      iiwa_joint_5: {p: 23.0,  i: 5.0,  d: 3.0,  i_clamp: 30.0}
+      iiwa_joint_6: {p: 13.0,  i: 3.0,  d: 3.0,  i_clamp: 30.0}
+      iiwa_joint_7: {p: 17.0,  i: 2.5, d: 2.0,  i_clamp: 10.0}
+    </rosparam>
+
+    <!-- Conditionally choose controllers argument -->
+    <group if="$(arg load_single_joint)">
+      <include file="$(find iiwa_control)/launch/iiwa_control.launch">
+        <arg name="hardware_interface" value="$(eval arg('trajectory_interface') if arg('trajectory_interface') else arg('hardware_interface'))" />
+        <arg name="controllers" value="$(eval 'joint_state_controller ' + (arg('trajectory_interface') if arg('trajectory_interface') else arg('hardware_interface')) + '_trajectory_controller ' + ' '.join([(arg('trajectory_interface') if arg('trajectory_interface') else arg('hardware_interface')) + '_J{}_controller'.format(i) for i in range(1,8)]))" />
+        <arg name="robot_name" value="$(arg robot_name)" />
+        <arg name="model" value="$(arg model)" />
+      </include>
+    </group>
+    <group unless="$(arg load_single_joint)">
+      <include file="$(find iiwa_control)/launch/iiwa_control.launch">
+        <arg name="hardware_interface" value="$(eval arg('trajectory_interface') if arg('trajectory_interface') else arg('hardware_interface'))" />
+        <arg name="controllers" value="$(eval 'joint_state_controller ' + (arg('trajectory_interface') if arg('trajectory_interface') else arg('hardware_interface')) + '_trajectory_controller')" />
+        <arg name="robot_name" value="$(arg robot_name)" />
+        <arg name="model" value="$(arg model)" />
+      </include>
+    </group>
+  </group>
+
+</launch>
