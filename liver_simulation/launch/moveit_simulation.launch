@@ -4,6 +4,7 @@
   <arg name="model" default="iiwa7"/>
   <arg name="hardware_interface" default="PositionJointInterface"/>
   <arg name="rviz" default="true"/>
+  <arg name="paused" default="false"/>
 
   <!-- Remap topics to match the namespaced robot -->
   <remap from="/$(arg hardware_interface)_trajectory_controller/follow_joint_trajectory" 
@@ -16,6 +17,7 @@
     <arg name="robot_name" value="$(arg robot_name)"/>
     <arg name="model" value="$(arg model)"/>
     <arg name="hardware_interface" value="$(arg hardware_interface)"/>
+    <arg name="paused" value="$(arg paused)"/>
   </include>
 
   <!-- Load MoveIt! move_group in the robot's namespace -->
