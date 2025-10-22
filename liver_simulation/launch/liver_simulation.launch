@@ -8,11 +8,13 @@
   <arg name="trajectory_interface" default="" />
   <!-- Whether to also load individual per-joint controllers (false keeps things lighter) -->
   <arg name="load_single_joint" default="false" />
+  <!-- Whether to start Gazebo paused (true = robot won't move until unpaused) -->
+  <arg name="paused" default="false" />
 
   <!-- Gazebo world -->
   <include file="$(find gazebo_ros)/launch/empty_world.launch">
     <arg name="world_name" value="$(find liver_simulation)/worlds/liver_sim.world"/>
-    <arg name="paused" value="false"/>
+    <arg name="paused" value="$(arg paused)"/>
     <arg name="use_sim_time" value="true"/>
     <arg name="gui" value="true"/>
     <arg name="headless" value="false"/>
@@ -38,17 +40,6 @@
 
   <!-- Controllers namespace -->
   <group ns="$(arg robot_name)">
-    <!-- PID tuner: provide gains for gazebo_ros_control to silence warnings when using effort-based controllers -->
-    <rosparam param="gazebo_ros_control/pid_gains">
-      iiwa_joint_1: {p: 500.0, i: 15.0, d: 30.0, i_clamp: 30.0}
-      iiwa_joint_2: {p: 200.0, i: 10.0, d: 10.0, i_clamp: 30.0}
-      iiwa_joint_3: {p: 65.0,  i: 15.0, d: 10.0, i_clamp: 30.0}
-      iiwa_joint_4: {p: 31.0,  i: 12.0, d: 7.0,  i_clamp: 30.0}
-      iiwa_joint_5: {p: 23.0,  i: 5.0,  d: 3.0,  i_clamp: 30.0}
-      iiwa_joint_6: {p: 13.0,  i: 3.0,  d: 3.0,  i_clamp: 30.0}
-      iiwa_joint_7: {p: 17.0,  i: 2.5, d: 2.0,  i_clamp: 10.0}
-    </rosparam>
-
     <!-- Conditionally choose controllers argument -->
     <group if="$(arg load_single_joint)">
       <include file="$(find iiwa_control)/launch/iiwa_control.launch">
