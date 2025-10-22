@@ -1,0 +1,44 @@
+<launch>
+  <!-- Arguments -->
+  <arg name="robot_name" default="iiwa"/>
+  <arg name="model" default="iiwa7"/>
+  <arg name="hardware_interface" default="PositionJointInterface"/>
+  <arg name="rviz" default="true"/>
+
+  <!-- Remap topics to match the namespaced robot -->
+  <remap from="/$(arg hardware_interface)_trajectory_controller/follow_joint_trajectory" 
+         to="/$(arg robot_name)/$(arg hardware_interface)_trajectory_controller/follow_joint_trajectory" />
+  <remap from="robot_description" to="/$(arg robot_name)/robot_description" /> 
+  <remap from="/get_planning_scene" to="/$(arg robot_name)/get_planning_scene" /> 
+
+  <!-- Include the Gazebo simulation with liver environment -->
+  <include file="$(find liver_simulation)/launch/liver_simulation.launch">
+    <arg name="robot_name" value="$(arg robot_name)"/>
+    <arg name="model" value="$(arg model)"/>
+    <arg name="hardware_interface" value="$(arg hardware_interface)"/>
+  </include>
+
+  <!-- Load MoveIt! move_group in the robot's namespace -->
+  <group ns="$(arg robot_name)">
+    <include file="$(find iiwa_moveit)/launch/move_group.launch">
+      <arg name="publish_monitored_planning_scene" value="true" />
+      <arg name="hardware_interface" value="$(arg hardware_interface)"/>
+      <arg name="robot_name" value="$(arg robot_name)"/>
+      <arg name="model" value="$(arg model)" />
+    </include>
+
+    <!-- Run RViz for visualization -->
+    <include if="$(arg rviz)" file="$(find iiwa_moveit)/launch/moveit_rviz.launch">
+      <arg name="config" value="true"/>
+    </include>
+  </group>
+
+  <!-- Publish scene objects to MoveIt! planning scene -->
+  <!-- This node reads from config/scene_objects.yaml and adds collision objects -->
+  <node name="scene_publisher" pkg="liver_simulation" type="add_collision_objects.py" output="screen">
+    <!-- Give move_group time to start before publishing scene -->
+    <param name="start_delay" value="5.0" />
+    <param name="robot_name" value="$(arg robot_name)" />
+  </node>
+
+</launch>

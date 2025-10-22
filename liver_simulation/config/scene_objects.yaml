@@ -1,0 +1,39 @@
+# Scene Objects Configuration
+# Single source of truth for environment objects in both Gazebo and MoveIt!
+#
+# Positions are relative to the robot's base frame (iiwa_link_0)
+# The robot_spawn_pose defines where the robot base is placed in Gazebo world frame
+
+# Robot spawn position in Gazebo world coordinates
+robot_spawn_pose:
+  x: 1.0
+  y: -1.0
+  z: 0.8
+  roll: 0
+  pitch: 0
+  yaw: 0
+
+scene_objects:
+  # Patient bed - positioned at the center
+  - name: "patient_bed"
+    type: "box"
+    dimensions: [2.0, 0.9, 0.8]  # [length, width, height] in meters
+    position: [0.0, 1.0, -0.4]    # [x, y, z] relative to robot base
+    orientation: [0, 0, 0, 1]     # [x, y, z, w] quaternion (no rotation)
+    frame_id: "iiwa_link_0"
+    
+  # Robot table - positioned beneath the robot
+  - name: "robot_table"
+    type: "box"
+    dimensions: [0.8, 0.8, 0.8]  # [length, width, height] in meters
+    position: [0.0, 0.0, -0.4]    # [x, y, z] relative to robot base (directly below)
+    orientation: [0, 0, 0, 1]     # [x, y, z, w] quaternion (no rotation)
+    frame_id: "iiwa_link_0"
+    
+  # Liver phantom - positioned on top of the patient bed
+  - name: "liver_phantom"
+    type: "box"
+    dimensions: [0.3, 0.4, 0.1]  # [length, width, height] in meters
+    position: [-0.3, 1.0, 0.05]   # [x, y, z] relative to robot base
+    orientation: [0, 0, 0, 1]     # [x, y, z, w] quaternion (no rotation)
+    frame_id: "iiwa_link_0"
