@@ -22,19 +22,19 @@
       <link name="link">
         <visual name="visual">
           <geometry>
-            <box><size>1.5 0.6 0.6</size></box>
+            <box><size>1.5 0.5 0.5</size></box>
           </geometry>
           <material>
             <script><uri>file://media/materials/scripts/gazebo.material</uri><name>Gazebo/Grey</name></script>
           </material>
         </visual>
         <collision name="collision">
-          <geometry><box><size>1.5 0.6 0.6</size></box></geometry>
+          <geometry><box><size>1.5 0.5 0.5</size></box></geometry>
         </collision>
       </link>
     </model>
 
-        <!-- A table for the iiwa robot -->
+    <!-- A table for the iiwa robot -->
     <model name="robot_table">
       <static>true</static>
       <pose>1.0 -0.5 0.25 0 0 0</pose> <!-- Smaller table, closer to the bed -->
@@ -60,7 +60,7 @@
       <link name="link">
         <visual name="visual">
           <geometry>
-            <box><size>0.3 0.4 0.1</size></box>
+            <box><size>0.2 0.2 0.1</size></box>
           </geometry>
           <material>
             <ambient>0.8 0.2 0.2 1</ambient>
@@ -69,7 +69,7 @@
           </material>
         </visual>
         <collision name="collision">
-          <geometry><box><size>0.3 0.4 0.1</size></box></geometry>
+          <geometry><box><size>0.25 0.25 0.2</size></box></geometry>
         </collision>
       </link>
     </model>
