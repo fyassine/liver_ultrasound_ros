@@ -18,7 +18,7 @@
     <!-- A simple model for the patient bed -->
     <model name="patient_bed">
       <static>true</static>
-      <pose>1.0 0.05 0.3 0 0 0</pose> <!-- Smaller and closer to the robot table -->
+      <pose>0 0.6 0.25 0 -0 0</pose>
       <link name="link">
         <visual name="visual">
           <geometry>
@@ -37,7 +37,7 @@
     <!-- A table for the iiwa robot -->
     <model name="robot_table">
       <static>true</static>
-      <pose>1.0 -0.5 0.25 0 0 0</pose> <!-- Smaller table, closer to the bed -->
+      <pose>0 0 0.25 0 -0 0</pose>
       <link name="link">
         <visual name="visual">
           <geometry>
@@ -56,7 +56,7 @@
     <!-- A simple model for the liver phantom -->
     <model name="liver_phantom">
       <static>true</static>
-      <pose>0.7 0 0.85 0 0 0</pose>
+      <pose>0 0.6 0.55 0 -0 0</pose>
       <link name="link">
         <visual name="visual">
           <geometry>
@@ -69,7 +69,7 @@
           </material>
         </visual>
         <collision name="collision">
-          <geometry><box><size>0.25 0.25 0.2</size></box></geometry>
+          <geometry><box><size>0.2 0.2 0.1</size></box></geometry>
         </collision>
       </link>
     </model>
