@@ -36,7 +36,7 @@
 
   <!-- Spawn model at table pose -->
   <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" output="screen"
-        args="-urdf -model $(arg robot_name) -param robot_description -x 1.0 -y -0.5 -z 0.5" />
+        args="-urdf -model $(arg robot_name) -param robot_description -x 0.0 -y -0.0 -z 0.5" />
 
   <!-- Controllers namespace -->
   <group ns="$(arg robot_name)">
