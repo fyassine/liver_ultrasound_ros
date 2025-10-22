@@ -20,6 +20,9 @@
     <arg name="paused" value="$(arg paused)"/>
   </include>
 
+  <!-- Generate simulated abdomen surface as a point cloud -->
+  <node name="surface_generator" pkg="liver_simulation" type="surface_generator.py" output="screen"/>
+
   <!-- Load MoveIt! move_group in the robot's namespace -->
   <group ns="$(arg robot_name)">
     <include file="$(find iiwa_moveit)/launch/move_group.launch">
@@ -41,6 +44,19 @@
     <!-- Give move_group time to start before publishing scene -->
     <param name="start_delay" value="5.0" />
     <param name="robot_name" value="$(arg robot_name)" />
+  </node>
+
+  <!-- Convert point cloud to collision mesh and add to planning scene -->
+  <node name="pointcloud_to_collision" pkg="liver_simulation" type="pointcloud_to_collision.py" output="screen">
+    <param name="robot_name" value="$(arg robot_name)" />
+    <param name="point_cloud_topic" value="/simulated_surface/points" />
+    <param name="mesh_name" value="abdomen_surface" />
+  </node>
+
+  <!-- Surface follower: generate and execute trajectory along the phantom surface -->
+  <node name="surface_follower" pkg="liver_simulation" type="surface_follower.py" output="screen">
+    <param name="robot_name" value="$(arg robot_name)" />
+    <param name="move_group" value="manipulator" />
   </node>
 
 </launch>

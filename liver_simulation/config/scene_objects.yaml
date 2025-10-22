@@ -7,33 +7,33 @@
 # Robot spawn position in Gazebo world coordinates
 robot_spawn_pose:
   x: 1.0
-  y: -1.0
-  z: 0.8
+  y: -0.5
+  z: 0.5
   roll: 0
   pitch: 0
   yaw: 0
 
 scene_objects:
-  # Patient bed - positioned at the center
+  # Patient bed - smaller and closer to the robot
   - name: "patient_bed"
     type: "box"
-    dimensions: [2.0, 0.9, 0.8]  # [length, width, height] in meters
-    position: [0.0, 1.0, -0.4]    # [x, y, z] relative to robot base
+    dimensions: [1.5, 0.6, 0.6]  # [length, width, height] in meters
+    position: [0.0, 0.55, -0.2]   # [x, y, z] relative to robot base
     orientation: [0, 0, 0, 1]     # [x, y, z, w] quaternion (no rotation)
     frame_id: "iiwa_link_0"
     
   # Robot table - positioned beneath the robot
   - name: "robot_table"
     type: "box"
-    dimensions: [0.8, 0.8, 0.8]  # [length, width, height] in meters
-    position: [0.0, 0.0, -0.4]    # [x, y, z] relative to robot base (directly below)
+    dimensions: [0.5, 0.5, 0.5]  # [length, width, height] in meters (smaller table)
+    position: [0.0, 0.0, -0.25]   # [x, y, z] relative to robot base (directly below)
     orientation: [0, 0, 0, 1]     # [x, y, z, w] quaternion (no rotation)
     frame_id: "iiwa_link_0"
     
-  # Liver phantom - positioned on top of the patient bed
-  - name: "liver_phantom"
-    type: "box"
-    dimensions: [0.3, 0.4, 0.1]  # [length, width, height] in meters
-    position: [-0.3, 1.0, 0.05]   # [x, y, z] relative to robot base
-    orientation: [0, 0, 0, 1]     # [x, y, z, w] quaternion (no rotation)
-    frame_id: "iiwa_link_0"
+  # The liver phantom is now generated dynamically by surface_generator.py as a point cloud
+  # - name: "liver_phantom"
+  #   type: "box"
+  #   dimensions: [0.3, 0.4, 0.1]  # [length, width, height] in meters
+  #   position: [-0.3, 1.0, 0.05]   # [x, y, z] relative to robot base
+  #   orientation: [0, 0, 0, 1]     # [x, y, z, w] quaternion (no rotation)
+  #   frame_id: "iiwa_link_0"

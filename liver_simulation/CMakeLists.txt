@@ -162,6 +162,8 @@ include_directories(
 ## in contrast to setup.py, you can choose the destination
 catkin_install_python(PROGRAMS
   scripts/add_collision_objects.py
+  scripts/surface_generator.py
+  scripts/pointcloud_to_collision.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 
