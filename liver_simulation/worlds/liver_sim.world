@@ -1,4 +1,9 @@
 <?xml version="1.0" ?>
+<!--
+  Liver Simulation World for Gazebo
+  Object definitions should match the canonical source in: config/scene_objects.yaml
+  Any changes to objects should be reflected in both files for Gazebo and MoveIt!
+-->
 <sdf version="1.6">
   <world name="default">
     <!-- A global light source -->
