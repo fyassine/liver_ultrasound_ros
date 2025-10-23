@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<package>
+  <name>ultrasound_probe_description</name>
+  <version>1.0.0</version>
+  <description>The ultrasound_probe_description package - URDF description of an ultrasound probe attached to the iiwa robot</description>
+
+  <maintainer email="fyassin.lakhal@tum.de">Fraj Lakhal</maintainer>
+
+  <license>BSD</license>
+  
+  <build_depend>iiwa_description</build_depend>  
+  <run_depend>iiwa_description</run_depend>
+  
+  <buildtool_depend>catkin</buildtool_depend>
+
+</package>

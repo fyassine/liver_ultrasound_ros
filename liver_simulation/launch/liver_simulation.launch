@@ -21,14 +21,14 @@
   </include>
 
   <!-- Upload URDF (places robot_description param) -->
-  <include file="$(find iiwa_description)/launch/$(arg model)_upload.launch">
+  <include file="$(find ultrasound_probe_description)/launch/iiwa7_ultrasound_probe_upload.launch">
     <arg name="hardware_interface" value="$(eval arg('trajectory_interface') if arg('trajectory_interface') else arg('hardware_interface'))"/>
     <arg name="robot_name" value="$(arg robot_name)" />
   </include>
 
   <!-- Also push the URDF into the controller namespace so gazebo_ros_control can resolve it -->
   <group ns="$(arg robot_name)">
-    <include file="$(find iiwa_description)/launch/$(arg model)_upload.launch">
+    <include file="$(find ultrasound_probe_description)/launch/iiwa7_ultrasound_probe_upload.launch">
       <arg name="hardware_interface" value="$(eval arg('trajectory_interface') if arg('trajectory_interface') else arg('hardware_interface'))"/>
       <arg name="robot_name" value="$(arg robot_name)" />
     </include>
