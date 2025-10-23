@@ -5,6 +5,7 @@ import moveit_commander
 import sys
 import tf
 import copy
+import math
 from geometry_msgs.msg import Pose, Quaternion
 
 class SurfaceFollower:
@@ -23,6 +24,11 @@ class SurfaceFollower:
         
         group_name = "manipulator"  # Replace with your robot's planning group if different
         self.move_group = moveit_commander.MoveGroupCommander(group_name, robot_description=f"/{robot_name}/robot_description", ns=robot_name)
+        
+        # Get probe length from parameter server
+        self.probe_length = rospy.get_param(f"{ns}/probe_length", 0.24)
+        self.surface_clearance = rospy.get_param('~surface_clearance', 0.01)
+        rospy.loginfo(f"Using probe length: {self.probe_length}, surface clearance: {self.surface_clearance}")
         
         self.move_group.set_planning_time(10.0) # seconds
 
@@ -64,13 +70,12 @@ class SurfaceFollower:
         # Create a target pose with a specific, downward-facing orientation
         start_pose = Pose()
         
-        # Set position to touch the liver surface (at the top surface level)
+        # Set position to touch the liver surface with a configurable clearance to avoid collision filtering
         start_pose.position.x = liver_pose.position.x
         start_pose.position.y = liver_pose.position.y
-        start_pose.position.z = liver_pose.position.z + liver_dims[2] / 2.0  # At liver surface level
-
-        # Set orientation to point straight down (180 degrees rotation around X-axis)
-        q = tf.transformations.quaternion_from_euler(-3.14159, 0, 0) # Roll, Pitch, Yaw
+        surface_height = liver_pose.position.z + liver_dims[2] / 2.0
+        start_pose.position.z = surface_height + self.surface_clearance
+        q = tf.transformations.quaternion_from_euler(math.pi, 0.0, 0.0)
         start_pose.orientation = Quaternion(*q)
         rospy.loginfo(f"Target starting pose: {start_pose}")
 

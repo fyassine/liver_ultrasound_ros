@@ -14,6 +14,7 @@
   
   <!-- Ultrasound probe properties -->
   <xacro:property name="probe_mass" value="0.300" />
+  <xacro:property name="probe_length" value="0.24" />
   
   <!-- Fix to world -->
   <link name="world"/>
