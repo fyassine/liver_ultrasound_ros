@@ -41,9 +41,9 @@
       <material name="Grey"/>
     </visual>
     <collision>
-      <origin xyz="0.01 -0.01 0.15" rpy="0 0 0"/>
+      <origin xyz="0 0 -0.107" rpy="0 0 0"/>
       <geometry>
-        <cylinder length="0.2" radius="0.09"/>
+        <mesh filename="package://ultrasound_probe_description/meshes/collision/iiwa_ultrasound_probe.dae"/>
       </geometry>
     </collision>
     <inertial>
@@ -68,5 +68,11 @@
         <cylinder length="0.0001" radius="0.0001" />
       </geometry>
     </visual>
+    <collision>
+      <origin rpy="0.0 0.0 0.0" xyz="0 0 0.0"/>
+      <geometry>
+        <cylinder length="0.0001" radius="0.0001" />
+      </geometry>
+    </collision>
   </link>
 </robot>
