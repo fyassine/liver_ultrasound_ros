@@ -1,0 +1,71 @@
+<?xml version="1.0"?>
+
+<!-- Ultrasound probe attached to iiwa7 robot -->
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="iiwa7_ultrasound_probe">
+  
+  <!-- Import Rviz colors -->
+  <xacro:include filename="$(find iiwa_description)/urdf/materials.xacro" />
+  <!--Import the iiwa7 macro -->
+  <xacro:include filename="$(find iiwa_description)/urdf/iiwa7.xacro"/>
+  
+  <!--  Arguments for the iiwa7 macro  -->
+  <xacro:arg name="hardware_interface" default="PositionJointInterface"/>
+  <xacro:arg name="robot_name" default="iiwa"/>
+  
+  <!-- Ultrasound probe properties -->
+  <xacro:property name="probe_mass" value="0.300" />
+  
+  <!-- Fix to world -->
+  <link name="world"/>
+  
+  <!-- Insert iiwa7 robot in the scene -->
+  <xacro:iiwa7 hardware_interface="$(arg hardware_interface)" robot_name="$(arg robot_name)" parent="world">
+    <origin xyz="0 0 0" rpy="0 0 0" />
+  </xacro:iiwa7>
+  
+  <!--  Joint between the tip of the iiwa7 and the base of the ultrasound probe -->
+  <joint name="probe_joint" type="fixed">
+    <parent link="iiwa_link_ee" />
+    <child link="probe_link" />
+    <origin xyz="0 0 0" rpy="0 ${PI/2.0} 0" />  
+  </joint>
+  
+  <!-- Ultrasound probe link with mesh -->
+  <link name="probe_link">
+    <visual>
+      <origin xyz="0 0 -0.107" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://ultrasound_probe_description/meshes/visual/iiwa_ultrasound_probe.dae"/>
+      </geometry>
+      <material name="Grey"/>
+    </visual>
+    <collision>
+      <origin xyz="0.01 -0.01 0.15" rpy="0 0 0"/>
+      <geometry>
+        <cylinder length="0.2" radius="0.09"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <origin xyz="0 0 0.15" rpy="0 0 0"/>
+      <mass value="${probe_mass}"/>
+      <inertia ixx="0.001" ixy="0.0" ixz="0.0" iyy="0.001" iyz="0.0" izz="0.001"/>
+    </inertial>
+  </link>
+  
+  <!--  Joint at the end of the probe for TCP control -->
+  <joint name="probe_ee_joint" type="fixed">
+    <parent link="probe_link" />
+    <child link="probe_link_ee" />
+    <origin xyz="0 0 0.24" rpy="0 0 0" />   
+  </joint>
+  
+  <!--  The TCP frame -->
+  <link name="probe_link_ee">
+    <visual>
+      <origin rpy="0.0 0.0 0.0" xyz="0 0 0.0"/>
+      <geometry>
+        <cylinder length="0.0001" radius="0.0001" />
+      </geometry>
+    </visual>
+  </link>
+</robot>
