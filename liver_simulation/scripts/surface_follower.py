@@ -120,6 +120,87 @@ class SurfaceFollower:
         
         rospy.loginfo("Successfully positioned probe above liver!")
         rospy.sleep(1)
+        
+        # Now move down to touch the liver surface
+        rospy.loginfo("Moving probe down to touch liver surface...")
+        touch_pose = Pose()
+        touch_pose.position.x = liver_pose.position.x
+        touch_pose.position.y = liver_pose.position.y
+        touch_pose.position.z = liver_top_z + self.surface_clearance
+        touch_pose.orientation = approach_pose.orientation
+        
+        self.move_group.set_pose_target(touch_pose)
+        success = self.move_group.go(wait=True)
+        self.move_group.stop()
+        self.move_group.clear_pose_targets()
+        
+        if not success:
+            rospy.logerr("Failed to touch liver surface. Aborting.")
+            return
+        
+        rospy.loginfo("Successfully touched liver surface!")
+        rospy.sleep(1)
+
+        # Execute sweep motion
+        rospy.loginfo("Generating border-following waypoints...")
+        
+        # Now create waypoints that trace around the liver's border in a rectangular pattern
+        # All waypoints will be at the same Z height (liver surface + clearance)
+        target_z = liver_top_z + self.surface_clearance
+        
+        # Waypoint 1: Move to front-left corner of liver
+        wp1 = Pose()
+        wp1.position.x = liver_pose.position.x - half_length
+        wp1.position.y = liver_pose.position.y - half_width
+        wp1.position.z = target_z
+        wp1.orientation = approach_pose.orientation
+        waypoints.append(wp1)
+        
+        # Waypoint 2: Move to front-right corner
+        wp2 = Pose()
+        wp2.position.x = liver_pose.position.x + half_length
+        wp2.position.y = liver_pose.position.y - half_width
+        wp2.position.z = target_z
+        wp2.orientation = approach_pose.orientation
+        waypoints.append(wp2)
+        
+        # Waypoint 3: Move to back-right corner
+        wp3 = Pose()
+        wp3.position.x = liver_pose.position.x + half_length
+        wp3.position.y = liver_pose.position.y + half_width
+        wp3.position.z = target_z
+        wp3.orientation = approach_pose.orientation
+        waypoints.append(wp3)
+        
+        # Waypoint 4: Move to back-left corner
+        wp4 = Pose()
+        wp4.position.x = liver_pose.position.x - half_length
+        wp4.position.y = liver_pose.position.y + half_width
+        wp4.position.z = target_z
+        wp4.orientation = approach_pose.orientation
+        waypoints.append(wp4)
+        
+        # Waypoint 5: Return to front-left corner to complete the rectangle
+        wp5 = Pose()
+        wp5.position.x = liver_pose.position.x - half_length
+        wp5.position.y = liver_pose.position.y - half_width
+        wp5.position.z = target_z
+        wp5.orientation = approach_pose.orientation
+        waypoints.append(wp5)
+
+        # Plan and execute the trajectory
+        rospy.loginfo(f"Executing sweep across {len(waypoints)} waypoints.")
+        (plan, fraction) = self.move_group.compute_cartesian_path(
+                                       waypoints,   # waypoints to follow
+                                       0.02,        # eef_step (increased for smoother path)
+                                       True)        # avoid_collisions (enabled for safety)
+        
+        if fraction > 0.9: # Execute if path is mostly complete
+            self.move_group.execute(plan, wait=True)
+            rospy.loginfo("Surface following complete.")
+        else:
+            rospy.logwarn(f"Could not compute a valid path for the sweep (fraction: {fraction}).")
+
 
 if __name__ == '__main__':
     try:
