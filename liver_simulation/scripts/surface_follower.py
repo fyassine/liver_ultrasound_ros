@@ -25,6 +25,9 @@ class SurfaceFollower:
         group_name = "manipulator"  # Replace with your robot's planning group if different
         self.move_group = moveit_commander.MoveGroupCommander(group_name, robot_description=f"/{robot_name}/robot_description", ns=robot_name)
         
+        # Set end effector to probe tip
+        self.move_group.set_end_effector_link("probe_link_ee")
+        
         # Get probe length from parameter server
         self.probe_length = rospy.get_param(f"{ns}/probe_length", 0.24)
         self.surface_clearance = rospy.get_param('~surface_clearance', 0.01)
@@ -67,28 +70,14 @@ class SurfaceFollower:
 
         # Sweep along the top surface (X-Y plane of the box)
         
-        # Create a target pose with a specific, downward-facing orientation
-        start_pose = Pose()
+        rospy.loginfo("Moving to home position.")
+        self.move_group.set_named_target("home")
         
-        # Set position to touch the liver surface with a configurable clearance to avoid collision filtering
-        start_pose.position.x = liver_pose.position.x
-        start_pose.position.y = liver_pose.position.y
-        surface_height = liver_pose.position.z + liver_dims[2] / 2.0
-        start_pose.position.z = surface_height + self.surface_clearance
-        q = tf.transformations.quaternion_from_euler(math.pi, 0.0, 0.0)
-        start_pose.orientation = Quaternion(*q)
-        rospy.loginfo(f"Target starting pose: {start_pose}")
-
-        # Move to the starting position first (at liver surface for contact)
-        rospy.loginfo("Moving to starting position at liver surface for contact.")
-        self.move_group.set_pose_target(start_pose)
-        
-        # Plan and execute, with better error checking
+        # Plan and execute
         success = self.move_group.go(wait=True)
         if not success:
-            rospy.logerr("Failed to move to the starting position. Is the goal reachable and not in collision? Check RViz.")
+            rospy.logerr("Failed to move to home position.")
             self.move_group.stop()
-            self.move_group.clear_pose_targets()
             return
 
         self.move_group.stop()
@@ -96,7 +85,6 @@ class SurfaceFollower:
         rospy.sleep(1)
 
         waypoints = []
-        base_pose = self.move_group.get_current_pose().pose
 
         # Liver dimensions: [length, width, height] = [0.2, 0.2, 0.1]
         liver_length = liver_dims[0]  # X dimension
@@ -106,54 +94,32 @@ class SurfaceFollower:
         half_length = liver_length / 2.0
         half_width = liver_width / 2.0
 
-        rospy.loginfo("Generating border-following waypoints...")
+        # First, move probe tip to be just above the liver surface center
+        rospy.loginfo("Moving probe to liver surface center with probe pointing down...")
+        liver_top_z = liver_pose.position.z + (liver_dims[2] / 2.0)  # Top of liver
+        approach_pose = Pose()
+        approach_pose.position.x = liver_pose.position.x
+        approach_pose.position.y = liver_pose.position.y
+        approach_pose.position.z = liver_top_z + self.surface_clearance + 0.3  # Start higher for safety
         
-        # Start from current position (above center)
-        # Create waypoints that trace around the liver's border in a rectangular pattern
+        # Orient the probe to point straight down (end effector Z-axis pointing down)
+        # Quaternion for 180 degree rotation around Y-axis (probe points down in -Z direction)
+        approach_pose.orientation.x = 0.0
+        approach_pose.orientation.y = 1.0
+        approach_pose.orientation.z = 0.0
+        approach_pose.orientation.w = 0.0
         
-        # Waypoint 1: Move to front-left corner of liver
-        wp1 = copy.deepcopy(base_pose)
-        wp1.position.x = liver_pose.position.x - half_length
-        wp1.position.y = liver_pose.position.y - half_width
-        waypoints.append(wp1)
+        self.move_group.set_pose_target(approach_pose)
+        success = self.move_group.go(wait=True)
+        self.move_group.stop()
+        self.move_group.clear_pose_targets()
         
-        # Waypoint 2: Move to front-right corner
-        wp2 = copy.deepcopy(wp1)
-        wp2.position.x = liver_pose.position.x + half_length
-        wp2.position.y = liver_pose.position.y - half_width
-        waypoints.append(wp2)
+        if not success:
+            rospy.logerr("Failed to move probe to liver surface. Aborting.")
+            return
         
-        # Waypoint 3: Move to back-right corner
-        wp3 = copy.deepcopy(wp2)
-        wp3.position.x = liver_pose.position.x + half_length
-        wp3.position.y = liver_pose.position.y + half_width
-        waypoints.append(wp3)
-        
-        # Waypoint 4: Move to back-left corner
-        wp4 = copy.deepcopy(wp3)
-        wp4.position.x = liver_pose.position.x - half_length
-        wp4.position.y = liver_pose.position.y + half_width
-        waypoints.append(wp4)
-        
-        # Waypoint 5: Return to front-left corner to complete the rectangle
-        wp5 = copy.deepcopy(wp4)
-        wp5.position.x = liver_pose.position.x - half_length
-        wp5.position.y = liver_pose.position.y - half_width
-        waypoints.append(wp5)
-
-        # 3. Plan and execute the trajectory
-        rospy.loginfo(f"Executing sweep across {len(waypoints)} waypoints.")
-        (plan, fraction) = self.move_group.compute_cartesian_path(
-                                       waypoints,   # waypoints to follow
-                                       0.02,        # eef_step (increased for smoother path)
-                                       True)        # avoid_collisions (enabled for safety)
-        
-        if fraction > 0.9: # Execute if path is mostly complete
-            self.move_group.execute(plan, wait=True)
-            rospy.loginfo("Surface following complete.")
-        else:
-            rospy.logwarn(f"Could not compute a valid path for the sweep (fraction: {fraction}).")
-
+        rospy.loginfo("Successfully positioned probe above liver!")
+        rospy.sleep(1)
 
 if __name__ == '__main__':
     try:
