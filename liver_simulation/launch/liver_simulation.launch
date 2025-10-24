@@ -59,4 +59,8 @@
     </group>
   </group>
 
+  <!-- Publish static TF for world camera optical frame -->
+  <node pkg="tf" type="static_transform_publisher" name="world_camera_tf_broadcaster"
+        args="0 0 2 0 28.6479 0 world world_camera_optical_frame 100" />
+
 </launch>
