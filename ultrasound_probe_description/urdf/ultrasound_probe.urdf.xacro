@@ -85,7 +85,7 @@
   <joint name="wrist_camera_joint" type="fixed">
     <parent link="probe_link" />
     <child link="wrist_camera_link" />
-    <origin xyz="0.07 0.07 0.0725" rpy="0 0 -0.75" />
+    <origin xyz="0.07 0.07 0.0725" rpy="0 ${-PI/2} -0.75" />
   </joint>
 
   <link name="wrist_camera_link">
