@@ -64,4 +64,10 @@
     <disable_collisions link1="iiwa_link_2" link2="probe_link" reason="Never" />
     <disable_collisions link1="iiwa_link_1" link2="probe_link" reason="Never" />
     <disable_collisions link1="iiwa_link_0" link2="probe_link" reason="Never" />
+    <!-- Disable collisions for wrist-mounted camera -->
+    <disable_collisions link1="probe_link" link2="wrist_camera_link" reason="Adjacent" />
+    <disable_collisions link1="probe_link_ee" link2="wrist_camera_link" reason="Never" />
+    <disable_collisions link1="iiwa_link_7" link2="wrist_camera_link" reason="Never" />
+    <disable_collisions link1="iiwa_link_6" link2="wrist_camera_link" reason="Never" />
+    <disable_collisions link1="iiwa_link_5" link2="wrist_camera_link" reason="Never" />
 </robot>

@@ -27,6 +27,7 @@
   </group>
 
   <!-- Include the Gazebo simulation with liver environment -->
+  <!-- DISABLED: Uncomment to enable Gazebo simulation -->
   <include file="$(find liver_simulation)/launch/liver_simulation.launch">
     <arg name="robot_name" value="$(arg robot_name)"/>
     <arg name="model" value="$(arg model)"/>
@@ -34,14 +35,22 @@
     <arg name="paused" value="$(arg paused)"/>
   </include>
 
+
   <!-- Load MoveIt! move_group in the robot's namespace -->
   <group ns="$(arg robot_name)">
+    <!-- Publish fake joint states since Gazebo is disabled -->
+    <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
+      <param name="use_gui" value="false"/>
+      <rosparam param="source_list">[move_group/fake_controller_joint_states]</rosparam>
+    </node>
+
     <include file="$(find iiwa_moveit)/launch/move_group.launch">
       <arg name="publish_monitored_planning_scene" value="true" />
       <arg name="hardware_interface" value="$(arg hardware_interface)"/>
       <arg name="robot_name" value="$(arg robot_name)"/>
       <arg name="model" value="$(arg model)" />
       <arg name="load_robot_description" value="false" />
+      <arg name="fake_execution" value="true" />
     </include>
 
     <!-- Run RViz for visualization -->
@@ -58,9 +67,10 @@
     <param name="robot_name" value="$(arg robot_name)" />
   </node>
 
-  <!-- Launch the surface follower node -->
+  <!-- Launch the surface follower node
   <node name="surface_follower" pkg="liver_simulation" type="surface_follower.py" output="screen">
     <param name="robot_name" value="$(arg robot_name)" />
   </node>
+  -->
   
 </launch>
