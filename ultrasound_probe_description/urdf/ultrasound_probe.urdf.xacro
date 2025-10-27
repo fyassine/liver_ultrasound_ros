@@ -28,7 +28,7 @@
   <joint name="probe_joint" type="fixed">
     <parent link="iiwa_link_ee" />
     <child link="probe_link" />
-    <origin xyz="0 0 0" rpy="0 ${PI/2.0} 0" />  
+    <origin xyz="0 0 0" rpy="0 0 0" />  
   </joint>
   
   <!-- Ultrasound probe link with mesh -->
@@ -57,7 +57,7 @@
   <joint name="probe_ee_joint" type="fixed">
     <parent link="probe_link" />
     <child link="probe_link_ee" />
-    <origin xyz="0 0 0.24" rpy="0 0 0" />   
+    <origin xyz="0 0 ${probe_length}" rpy="0 0 0" />   
   </joint>
   
   <!--  The TCP frame -->

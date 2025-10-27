@@ -12,6 +12,20 @@
   <remap from="robot_description" to="/$(arg robot_name)/robot_description" /> 
   <remap from="/get_planning_scene" to="/$(arg robot_name)/get_planning_scene" /> 
 
+  <!-- Upload robot URDF to parameter server -->
+  <include file="$(find ultrasound_probe_description)/launch/iiwa7_ultrasound_probe_upload.launch">
+    <arg name="hardware_interface" value="$(arg hardware_interface)"/>
+    <arg name="robot_name" value="$(arg robot_name)" />
+  </include>
+
+  <!-- Also upload to the namespaced parameter for MoveIt -->
+  <group ns="$(arg robot_name)">
+    <include file="$(find ultrasound_probe_description)/launch/iiwa7_ultrasound_probe_upload.launch">
+      <arg name="hardware_interface" value="$(arg hardware_interface)"/>
+      <arg name="robot_name" value="$(arg robot_name)" />
+    </include>
+  </group>
+
   <!-- Include the Gazebo simulation with liver environment -->
   <include file="$(find liver_simulation)/launch/liver_simulation.launch">
     <arg name="robot_name" value="$(arg robot_name)"/>
