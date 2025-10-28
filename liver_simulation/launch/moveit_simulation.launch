@@ -59,6 +59,15 @@
     <include if="$(arg rviz)" file="$(find iiwa_moveit)/launch/moveit_rviz.launch">
       <arg name="config" value="true"/>
     </include>
+
+    <node pkg="liver_simulation" type="pointcloud_aligner.py" name="pointcloud_aligner" output="screen" launch-prefix="bash -c 'sleep 5.0; $0 $@' ">
+      <param name="target_frame" value="probe_link_ee"/>
+      <param name="world_topic" value="/world_camera/depth/points"/>
+      <param name="wrist_topic" value="/$(arg robot_name)/wrist_camera/depth/points"/>
+      <param name="world_aligned_topic" value="world_camera/depth/aligned"/>
+      <param name="wrist_aligned_topic" value="wrist_camera/depth/aligned"/>
+    </node>
+
   </group>
 
   <!-- Publish scene objects to MoveIt! planning scene -->

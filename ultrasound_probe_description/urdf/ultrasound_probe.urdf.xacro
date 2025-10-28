@@ -165,6 +165,7 @@
       <update_rate>30</update_rate>
       <visualize>false</visualize>
       <plugin name="wrist_camera_controller" filename="libgazebo_ros_openni_kinect.so">
+        <robotNamespace>/$(arg robot_name)</robotNamespace>
         <alwaysOn>true</alwaysOn>
         <updateRate>30.0</updateRate>
         <cameraName>wrist_camera</cameraName>
@@ -179,7 +180,7 @@
         <distortionK3>0.0</distortionK3>
         <distortionT1>0.0</distortionT1>
         <distortionT2>0.0</distortionT2>
-        <pointCloudCutoff>0.4</pointCloudCutoff>
+        <pointCloudCutoff>0.02</pointCloudCutoff>
         <pointCloudCutoffMax>5.0</pointCloudCutoffMax>
       </plugin>
     </sensor>
