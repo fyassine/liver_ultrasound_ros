@@ -20,6 +20,15 @@
   <xacro:property name="camera_mass" value="0.072" />
   <xacro:property name="PI" value="3.14159265359" />
   
+  <!-- Force-torque sensor properties -->
+  <xacro:property name="ft_sensor_mass" value="0.120" />
+  <xacro:property name="ft_sensor_radius" value="0.03" />
+  <xacro:property name="ft_sensor_thickness" value="0.015" />
+  <xacro:property name="ft_sensor_ixx"
+                  value="${(1.0/12.0) * ft_sensor_mass * (3 * ft_sensor_radius * ft_sensor_radius + ft_sensor_thickness * ft_sensor_thickness)}" />
+  <xacro:property name="ft_sensor_izz"
+                  value="${0.5 * ft_sensor_mass * ft_sensor_radius * ft_sensor_radius}" />
+  
   <!-- Fix to world -->
   <link name="world"/>
   
@@ -28,40 +37,59 @@
     <origin xyz="0 0 0" rpy="0 0 0" />
   </xacro:iiwa7>
   
-  <!--  Joint between the tip of the iiwa7 and the base of the ultrasound probe -->
-  <joint name="probe_joint" type="fixed">
+  <!--  Joint between the tip of the iiwa7 and the force-torque sensor -->
+  <!-- Use revolute with zero limits to enable F/T sensor plugin -->
+  <joint name="ft_sensor_joint" type="revolute">
     <parent link="iiwa_link_ee" />
-    <child link="probe_link" />
-    <origin xyz="0 0 0" rpy="0 0 0" />  
+    <child link="ft_sensor_link" />
+    <origin xyz="0 0 0" rpy="0 0 0" />
+    <axis xyz="0 0 1"/>
+    <limit lower="0" upper="0" effort="0" velocity="0"/>
   </joint>
-  
-  <!-- Ultrasound probe link with mesh -->
-  <link name="probe_link">
+
+  <!-- Merged F/T sensor + probe into single rigid body for force transmission -->
+  <link name="ft_sensor_link">
+    <!-- F/T sensor visual (small disk) -->
     <visual>
-      <origin xyz="0 0 -0.107" rpy="0 0 0"/>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <cylinder length="${ft_sensor_thickness}" radius="${ft_sensor_radius}"/>
+      </geometry>
+      <material name="Grey"/>
+    </visual>
+    
+    <!-- Probe visual (offset to account for sensor thickness) -->
+    <visual>
+      <origin xyz="0 0 ${ft_sensor_thickness/2 - 0.107}" rpy="0 0 0"/>
       <geometry>
         <mesh filename="package://ultrasound_probe_description/meshes/visual/iiwa_ultrasound_probe.dae"/>
       </geometry>
       <material name="Grey"/>
     </visual>
+    
+    <!-- Collision for entire assembly (use probe mesh for contact) -->
     <collision>
-      <origin xyz="0 0 -0.107" rpy="0 0 0"/>
+      <origin xyz="0 0 ${ft_sensor_thickness/2 - 0.107}" rpy="0 0 0"/>
       <geometry>
         <mesh filename="package://ultrasound_probe_description/meshes/collision/iiwa_ultrasound_probe.dae"/>
       </geometry>
     </collision>
+    
+    <!-- Combined inertia (sensor + probe mass) -->
     <inertial>
-      <origin xyz="0 0 0.15" rpy="0 0 0"/>
-      <mass value="${probe_mass}"/>
-      <inertia ixx="0.001" ixy="0.0" ixz="0.0" iyy="0.001" iyz="0.0" izz="0.001"/>
+      <origin xyz="0 0 ${ft_sensor_thickness/2 + 0.15}" rpy="0 0 0"/>
+      <mass value="${ft_sensor_mass + probe_mass}"/>
+      <inertia ixx="0.002" ixy="0" ixz="0"
+               iyy="0.002" iyz="0"
+               izz="0.001"/>
     </inertial>
   </link>
   
-  <!--  Joint at the end of the probe for TCP control -->
+  <!--  TCP frame at probe tip (relative to sensor link) -->
   <joint name="probe_ee_joint" type="fixed">
-    <parent link="probe_link" />
+    <parent link="ft_sensor_link" />
     <child link="probe_link_ee" />
-    <origin xyz="0 0 ${probe_length}" rpy="0 0 0" />   
+    <origin xyz="0 0 ${ft_sensor_thickness/2 + probe_length}" rpy="0 0 0" />   
   </joint>
   
   <!--  The TCP frame -->
@@ -80,12 +108,33 @@
     </collision>
   </link>
 
+  <!-- Transmission for the force-torque sensor joint to expose it to ros_control -->
+  <transmission name="ft_sensor_joint_transmission">
+    <type>transmission_interface/SimpleTransmission</type>
+    <actuator name="ft_sensor_actuator">
+      <mechanicalReduction>1.0</mechanicalReduction>
+    </actuator>
+    <joint name="ft_sensor_joint">
+      <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+    </joint>
+  </transmission>
+
+  <!-- Gazebo plugin to expose the simulated force-torque readings -->
+  <gazebo>
+    <plugin name="wrist_ft_sensor_plugin" filename="libgazebo_ros_ft_sensor.so">
+      <updateRate>100.0</updateRate>
+      <topicName>/$(arg robot_name)/ft_sensor/wrench</topicName>
+      <jointName>ft_sensor_joint</jointName>
+    </plugin>
+  </gazebo>
+
   <!-- Wrist-mounted RGB-D Camera -->
-  <!-- Joint to mount camera on the side of probe_link -->
+  <!-- Joint to mount camera on the side of the sensor/probe assembly -->
   <joint name="wrist_camera_joint" type="fixed">
-    <parent link="probe_link" />
+    <parent link="ft_sensor_link" />
     <child link="wrist_camera_link" />
-    <origin xyz="0.07 0.07 0.0725" rpy="0 ${-PI/2} -0.75" />
+    <!-- Adjust Z offset to account for sensor thickness -->
+    <origin xyz="0.07 0.07 ${ft_sensor_thickness/2 + 0.0725}" rpy="0 ${-PI/2} -0.75" />
   </joint>
 
   <link name="wrist_camera_link">
