@@ -61,6 +61,5 @@
   </group>
 
   <!-- Publish static TF for world camera optical frame -->
-  <node pkg="tf" type="static_transform_publisher" name="world_camera_tf_broadcaster"
-    args="1 1 2 -2.35619449 0.9 0 world world_camera_optical_frame 100" />
+  <node pkg="liver_simulation" type="world_camera_tf_broadcaster.py" name="world_camera_tf_broadcaster" output="screen" />
 </launch>

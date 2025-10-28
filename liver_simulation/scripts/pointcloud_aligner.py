@@ -12,9 +12,10 @@ class PointCloudAligner:
         self.world_aligned_topic = rospy.get_param("~world_aligned_topic", "world_camera/depth/aligned")
         self.wrist_aligned_topic = rospy.get_param("~wrist_aligned_topic", "wrist_camera/depth/aligned")
 
-        self.buffer = tf2_ros.Buffer(cache_time=rospy.Duration(2.0))
-        self.listener = tf2_ros.TransformListener(self.buffer)
-
+        # Keep a longer TF buffer so we can use the transform that matches the
+        # point cloud timestamp (especially important when the probe is moving).
+        self.buffer = tf2_ros.Buffer(cache_time=rospy.Duration(10.0))
+        self.listener = tf2_ros.TransformListener(self.buffer)        
         self.world_pub = rospy.Publisher(self.world_aligned_topic, PointCloud2, queue_size=1)
         self.wrist_pub = rospy.Publisher(self.wrist_aligned_topic, PointCloud2, queue_size=1)
 
@@ -36,34 +37,11 @@ class PointCloudAligner:
                 self.target_frame,
                 cloud.header.frame_id,
                 cloud.header.stamp,
-                rospy.Duration(0.2),
+                rospy.Duration(0.5),
             )
-        except tf2_ros.ExtrapolationException as exc:
-            # Fall back to the latest available transform when the message
-            # timestamp is older than the TF buffer horizon.
-            try:
-                transform = self.buffer.lookup_transform(
-                    self.target_frame,
-                    cloud.header.frame_id,
-                    rospy.Time(0),
-                    rospy.Duration(0.2),
-                )
-                rospy.logdebug(
-                    "PointCloudAligner using latest transform for %s -> %s (was: %s)",
-                    cloud.header.frame_id,
-                    self.target_frame,
-                    exc,
-                )
-            except tf2_ros.TransformException as latest_exc:
-                rospy.logwarn_throttle(
-                    1.0,
-                    "PointCloudAligner waiting for transform %s -> %s (%s)",
-                    self.target_frame,
-                    cloud.header.frame_id,
-                    latest_exc,
-                )
-                return
-        except (tf2_ros.LookupException, tf2_ros.ConnectivityException) as exc:
+        except (tf2_ros.LookupException,
+                tf2_ros.ConnectivityException,
+                tf2_ros.ExtrapolationException) as exc:
             rospy.logwarn_throttle(
                 1.0,
                 "PointCloudAligner waiting for transform %s -> %s (%s)",
