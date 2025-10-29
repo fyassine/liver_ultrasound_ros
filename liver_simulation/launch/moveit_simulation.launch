@@ -70,6 +70,14 @@
 
   </group>
 
+    <!-- Ultrasound Scan Simulator -->
+  <node pkg="liver_simulation" type="scan_simulator.py" name="scan_simulator" output="screen">
+    <param name="robot_name" value="$(arg robot_name)"/>
+    <param name="contact_threshold" value="3.0"/>  <!-- Higher threshold to require sustained force -->
+    <param name="debounce_samples" value="3"/>     <!-- Smaller window: need 3 out of 5 samples -->
+    <param name="publish_rate" value="30.0"/>
+  </node>
+
   <!-- Publish scene objects to MoveIt! planning scene -->
   <!-- This node reads from config/scene_objects.yaml and adds collision objects -->
   <node name="scene_publisher" pkg="liver_simulation" type="add_collision_objects.py" output="screen">

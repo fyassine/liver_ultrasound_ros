@@ -12,6 +12,8 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   rospy
   std_msgs
+  cv_bridge
+  sensor_msgs
 )
 
 ## System dependencies are found with CMake's conventions
@@ -162,6 +164,10 @@ include_directories(
 ## in contrast to setup.py, you can choose the destination
 catkin_install_python(PROGRAMS
   scripts/add_collision_objects.py
+  scripts/surface_follower.py
+  scripts/pointcloud_aligner.py
+  scripts/world_camera_tf_broadcaster.py
+  scripts/scan_simulator.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 
@@ -190,6 +196,12 @@ catkin_install_python(PROGRAMS
 install(DIRECTORY launch worlds config
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
   PATTERN ".svn" EXCLUDE
+)
+
+## Install images directory
+install(DIRECTORY images/
+  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/images
+  FILES_MATCHING PATTERN "*.png" PATTERN "*.jpg" PATTERN "*.jpeg"
 )
 
 #############
