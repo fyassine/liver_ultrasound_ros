@@ -9,6 +9,14 @@ import math
 from geometry_msgs.msg import Pose, Quaternion
 from gazebo_msgs.msg import ContactsState
 
+# ANSI color codes for terminal output
+GREEN = '\033[92m'
+RESET = '\033[0m'
+
+def log_success(msg):
+    """Log success messages in green"""
+    rospy.loginfo(f"{GREEN}{msg}{RESET}")
+
 class SurfaceFollower:
     def __init__(self):
         """
@@ -152,7 +160,7 @@ class SurfaceFollower:
             rospy.logerr("DEBUG: Planning failed - likely due to collision or unreachable pose")
             return
         
-        rospy.loginfo("Successfully positioned probe above liver!")
+        log_success("Successfully positioned probe above liver!")
         rospy.sleep(1)
         
         # Now move down to touch the liver surface using Cartesian path
@@ -208,7 +216,7 @@ class SurfaceFollower:
             rospy.logerr("Failed to touch liver surface. Aborting.")
             return
         
-        rospy.loginfo("Successfully touched liver surface!")
+        log_success("Successfully touched liver surface!")
         rospy.sleep(0.5)
         
         self._apply_contact_push(touch_pose)
@@ -273,7 +281,7 @@ class SurfaceFollower:
         
         if fraction > 0.9: # Execute if path is mostly complete
             self.move_group.execute(plan, wait=True)
-            rospy.loginfo("Surface following complete.")
+            log_success("Surface following complete.")
         else:
             rospy.logwarn(f"Could not compute a valid path for the sweep (fraction: {fraction}).")
 
@@ -346,7 +354,7 @@ class SurfaceFollower:
         self.move_group.set_max_velocity_scaling_factor(1.0)
         self.move_group.set_max_acceleration_scaling_factor(1.0)
         
-        rospy.loginfo("Contact push complete. Check contact sensor readings above.")
+        log_success("Contact push complete. Check contact sensor readings above.")
 
 
 
