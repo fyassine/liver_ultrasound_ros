@@ -11,6 +11,14 @@ from geometry_msgs.msg import PoseStamped
 from moveit_msgs.msg import CollisionObject, PlanningScene
 from shape_msgs.msg import SolidPrimitive
 
+# ANSI color codes for terminal output
+GREEN = '\033[92m'
+RESET = '\033[0m'
+
+def log_success(msg):
+    """Log success messages in green"""
+    rospy.loginfo(f"{GREEN}{msg}{RESET}")
+
 
 class ScenePublisher:
     def __init__(self):
@@ -30,7 +38,7 @@ class ScenePublisher:
         
         self.publish_scene()
         
-        rospy.loginfo("Scene publisher initialized and objects published to planning scene")
+        log_success("Scene publisher initialized and objects published to planning scene")
     
     def load_scene_config(self):
         """Load scene objects from YAML configuration file."""
@@ -91,7 +99,7 @@ class ScenePublisher:
             rospy.loginfo(f"Added collision object: {obj_config['name']}")
         
         self.scene_pub.publish(planning_scene)
-        rospy.loginfo(f"Published {len(scene_objects)} objects to planning scene")
+        log_success(f"Published {len(scene_objects)} objects to planning scene")
 
 
 if __name__ == '__main__':
