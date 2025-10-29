@@ -119,13 +119,26 @@
     </joint>
   </transmission>
 
-  <!-- Gazebo plugin to expose the simulated force-torque readings -->
-  <gazebo>
-    <plugin name="wrist_ft_sensor_plugin" filename="libgazebo_ros_ft_sensor.so">
+
+  <!-- Gazebo contact sensor for probe collision detection and force measurement -->
+  <gazebo reference="ft_sensor_link">
+    <sensor name="probe_contact_sensor" type="contact">
       <updateRate>100.0</updateRate>
-      <topicName>/$(arg robot_name)/ft_sensor/wrench</topicName>
-      <jointName>ft_sensor_joint</jointName>
-    </plugin>
+      <contact>
+        <collision>ft_sensor_link_collision</collision>
+      </contact>
+      <plugin name="probe_contact_plugin" filename="libgazebo_ros_bumper.so">
+        <bumperTopicName>/$(arg robot_name)/ft_sensor/wrench</bumperTopicName>
+        <frameName>ft_sensor_link</frameName>
+      </plugin>
+    </sensor>
+    
+    <!-- Add surface properties for better contact simulation -->
+    <mu1>0.5</mu1>
+    <mu2>0.5</mu2>
+    <kp>1000000.0</kp>
+    <kd>100.0</kd>
+    <minDepth>0.001</minDepth>
   </gazebo>
 
   <!-- Wrist-mounted RGB-D Camera -->
