@@ -1,16 +1,14 @@
-#!/usr/bin/env python3
+#!/usr/bin/python3
 """
 Ultrasound Scan Simulator
-Publishes a static ultrasound image when the probe is in contact with the phantom.
+Publishes a static ultrasound image continuously (no contact detection).
 """
 
 import rospy
 import cv2
 import os
 from sensor_msgs.msg import Image
-from gazebo_msgs.msg import ContactsState
 from cv_bridge import CvBridge
-from collections import deque
 
 # ANSI color codes for terminal output
 GREEN = '\033[92m'
@@ -60,20 +58,8 @@ class ScanSimulator:
             queue_size=10
         )
         
-        # Track contact state - simple immediate detection
-        self.in_contact = False
+        # Publish rate
         self.publish_rate = rospy.get_param('~publish_rate', 30.0)  # Hz
-        
-        # Subscribe to force/torque sensor contact topic
-        wrench_topic = f"/{robot_name}/ft_sensor/wrench"
-        rospy.loginfo(f"Subscribing to contact topic: {wrench_topic}")
-        rospy.loginfo(f"Using immediate contact detection (force > 0.1 N)")
-        
-        self.wrench_sub = rospy.Subscriber(
-            wrench_topic,
-            ContactsState,
-            self._contact_callback
-        )
         
         # Timer for publishing at fixed rate
         self.timer = rospy.Timer(
@@ -81,39 +67,10 @@ class ScanSimulator:
             self._publish_timer_callback
         )
         
-        log_success("Scan simulator initialized. Waiting for contact...")
-    
-    def _contact_callback(self, msg):
-        """Detect contact based on ContactsState from Gazebo F/T sensor - simple immediate detection."""
-        
-        # Calculate current force magnitude
-        has_contact_states = len(msg.states) > 0
-        if not has_contact_states or not msg.states[0].total_wrench:
-            current_force = 0.0
-        else:
-            total_wrench = msg.states[0].total_wrench
-            force = total_wrench.force
-            current_force = (force.x**2 + force.y**2 + force.z**2)**0.5
-        
-        # Simple threshold: any force above minimum threshold = contact
-        min_force_threshold = 0.1  # Very low threshold to detect any contact
-        
-        # Update contact state immediately based on current force
-        new_contact_state = current_force > min_force_threshold
-        
-        # Log state changes
-        if new_contact_state and not self.in_contact:
-            log_success(f"Contact detected! Force: {current_force:.2f} N")
-            self.in_contact = True
-        elif not new_contact_state and self.in_contact:
-            rospy.loginfo(f"Contact lost! Force: {current_force:.2f} N")
-            self.in_contact = False
+        log_success("Scan simulator initialized. Publishing ultrasound images...")
     
     def _publish_timer_callback(self, event):
-        """Publish ultrasound image at fixed rate when in contact."""
-        if not self.in_contact:
-            return
-        
+        """Publish ultrasound image at fixed rate."""
         # Convert OpenCV image to ROS Image message
         try:
             img_msg = self.bridge.cv2_to_imgmsg(self.ultrasound_img, encoding="mono8")
