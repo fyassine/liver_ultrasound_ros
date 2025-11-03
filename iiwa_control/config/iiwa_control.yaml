@@ -137,6 +137,7 @@
   # Forward Position Controllers ---------------------------------------
   PositionJointInterface_trajectory_controller:
     type: position_controllers/JointTrajectoryController
+    command_topic: /command
     joints: 
       - iiwa_joint_1
       - iiwa_joint_2
@@ -147,15 +148,15 @@
       - iiwa_joint_7
 
     constraints:
-      goal_time: 1.0
+      goal_time: 10.0
       stopped_velocity_tolerance: 0.1
-      iiwa_joint_1: {goal: 0.02}
-      iiwa_joint_2: {goal: 0.02}
-      iiwa_joint_3: {goal: 0.02}
-      iiwa_joint_4: {goal: 0.02}
-      iiwa_joint_5: {goal: 0.02}
-      iiwa_joint_6: {goal: 0.02}
-      iiwa_joint_7: {goal: 0.02}
+      iiwa_joint_1: {goal: 0.2}
+      iiwa_joint_2: {goal: 0.1}
+      iiwa_joint_3: {goal: 0.1}
+      iiwa_joint_4: {goal: 0.1}
+      iiwa_joint_5: {goal: 0.1}
+      iiwa_joint_6: {goal: 0.1}
+      iiwa_joint_7: {goal: 0.1}
 
     state_publish_rate:  50
     action_monitor_rate: 50

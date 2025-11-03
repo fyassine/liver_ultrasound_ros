@@ -35,9 +35,16 @@
     </include>
   </group>
 
-  <!-- Spawn model at table pose -->
+  <!-- Spawn model at table pose with initial joint positions at home -->
   <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" output="screen"
-        args="-urdf -model $(arg robot_name) -param robot_description -x 0.0 -y 0.0 -z 0.5" />
+        args="-urdf -model $(arg robot_name) -param robot_description -x 0.0 -y 0.0 -z 0.5 
+              -J $(arg robot_name)_joint_1 0.0
+              -J $(arg robot_name)_joint_2 0.0
+              -J $(arg robot_name)_joint_3 0.0
+              -J $(arg robot_name)_joint_4 0.0
+              -J $(arg robot_name)_joint_5 0.0
+              -J $(arg robot_name)_joint_6 0.0
+              -J $(arg robot_name)_joint_7 0.0" />
 
   <!-- Controllers namespace -->
   <group ns="$(arg robot_name)">
