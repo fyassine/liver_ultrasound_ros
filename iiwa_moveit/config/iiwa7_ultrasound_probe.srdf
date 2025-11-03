@@ -18,7 +18,7 @@
         <joint name="iiwa_joint_6" />
         <joint name="iiwa_joint_7" />
         <joint name="iiwa_joint_ee" />
-        <joint name="ft_sensor_joint" />
+        <joint name="probe_joint" />
         <joint name="probe_ee_joint" />
     </group>
     <group name="endeffector">
@@ -33,10 +33,9 @@
         <joint name="iiwa_joint_5" value="0" />
         <joint name="iiwa_joint_6" value="0" />
         <joint name="iiwa_joint_7" value="0" />
-        <joint name="ft_sensor_joint" value="0" />
     </group_state>
     <!--VIRTUAL JOINT: Purpose: this element defines a virtual joint between a robot link and an external frame of reference (considered fixed with respect to the robot)-->
-    <virtual_joint name="ft_sensor_virtual_joint" type="fixed" parent_frame="iiwa_link_ee" child_link="ft_sensor_link" />
+    <virtual_joint name="virtual_joint" type="fixed" parent_frame="world" child_link="iiwa_link_0" />
     <!--END EFFECTOR: Purpose: Represent information about an end effector.-->
     <end_effector name="ultrasound_probe" parent_link="probe_link_ee" group="endeffector" parent_group="manipulator"/>
     <!--DISABLE COLLISIONS: By default it is assumed that any link of the robot could potentially come into collision with any other link in the robot. This tag disables collision checking between a specified pair of links. -->
@@ -65,22 +64,21 @@
     <disable_collisions link1="iiwa_link_5" link2="iiwa_link_6" reason="Adjacent" />
     <disable_collisions link1="iiwa_link_5" link2="iiwa_link_7" reason="Never" />
     <disable_collisions link1="iiwa_link_6" link2="iiwa_link_7" reason="Adjacent" />
-    <!-- Disable collisions for force-torque sensor (now merged with probe) -->
-    <disable_collisions link1="iiwa_link_ee" link2="ft_sensor_link" reason="Adjacent" />
-    <disable_collisions link1="iiwa_link_7" link2="ft_sensor_link" reason="Adjacent" />
-    <disable_collisions link1="iiwa_link_6" link2="ft_sensor_link" reason="Never" />
-    <disable_collisions link1="iiwa_link_5" link2="ft_sensor_link" reason="Never" />
-    <disable_collisions link1="iiwa_link_4" link2="ft_sensor_link" reason="Never" />
-    <disable_collisions link1="iiwa_link_3" link2="ft_sensor_link" reason="Never" />
-    <disable_collisions link1="iiwa_link_2" link2="ft_sensor_link" reason="Never" />
-    <disable_collisions link1="iiwa_link_1" link2="ft_sensor_link" reason="Never" />
-    <disable_collisions link1="iiwa_link_0" link2="ft_sensor_link" reason="Never" />
-    <disable_collisions link1="ft_sensor_link" link2="probe_link_ee" reason="Never" />
-    <disable_collisions link1="ft_sensor_link" link2="wrist_camera_link" reason="Adjacent" />
+    <!-- Disable collisions for probe -->
+    <disable_collisions link1="iiwa_link_ee" link2="probe_link" reason="Adjacent" />
+    <disable_collisions link1="iiwa_link_7" link2="probe_link" reason="Adjacent" />
+    <disable_collisions link1="iiwa_link_6" link2="probe_link" reason="Never" />
+    <disable_collisions link1="iiwa_link_5" link2="probe_link" reason="Never" />
+    <disable_collisions link1="iiwa_link_4" link2="probe_link" reason="Never" />
+    <disable_collisions link1="iiwa_link_3" link2="probe_link" reason="Never" />
+    <disable_collisions link1="iiwa_link_2" link2="probe_link" reason="Never" />
+    <disable_collisions link1="iiwa_link_1" link2="probe_link" reason="Never" />
+    <disable_collisions link1="iiwa_link_0" link2="probe_link" reason="Never" />
+    <disable_collisions link1="probe_link" link2="probe_link_ee" reason="Never" />
+    <disable_collisions link1="probe_link" link2="wrist_camera_link" reason="Adjacent" />
     <!-- Disable collisions for wrist-mounted camera -->
     <disable_collisions link1="probe_link_ee" link2="wrist_camera_link" reason="Never" />
     <disable_collisions link1="iiwa_link_7" link2="wrist_camera_link" reason="Never" />
     <disable_collisions link1="iiwa_link_6" link2="wrist_camera_link" reason="Never" />
     <disable_collisions link1="iiwa_link_5" link2="wrist_camera_link" reason="Never" />
-    <passive_joint name="ft_sensor_joint" />
 </robot>
