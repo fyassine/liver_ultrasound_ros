@@ -1,7 +1,7 @@
-#!/usr/bin/env python3
-
 import rospy
 import moveit_commander
+from geometry_msgs.msg import Pose
+import os
 import sys
 import tf
 import copy

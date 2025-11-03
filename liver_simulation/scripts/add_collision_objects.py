@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/python3
 """
 Scene Publisher for MoveIt!
 Reads scene objects from YAML config and publishes them to the MoveIt!
