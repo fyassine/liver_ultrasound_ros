@@ -1,0 +1,3 @@
+<launch>
+    <node name="iiwa_trajectory_replayer" pkg="iiwa_trajectory" type="replay_trajectory.py" output="screen"/>
+</launch>
