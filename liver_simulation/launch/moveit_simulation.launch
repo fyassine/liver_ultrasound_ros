@@ -87,9 +87,9 @@
   </node>
 
   <!-- Launch the surface follower node -->
-  <node name="surface_follower" pkg="liver_simulation" type="surface_follower.py" output="screen">
+  <!-- <node name="surface_follower" pkg="liver_simulation" type="surface_follower.py" output="screen">
     <param name="robot_name" value="$(arg robot_name)" />
-  </node>
+  </node> -->
 
   
 </launch>

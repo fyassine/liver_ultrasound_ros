@@ -1,0 +1,14 @@
+{
+    "python.autoComplete.extraPaths": [
+        "/home/aorta-scan/auto_liver_ultrasound/catkin_ws/devel/lib/python3/dist-packages",
+        "/home/aorta-scan/spine_scan/Felix/catkin_ws/devel/lib/python3/dist-packages",
+        "/home/aorta-scan/catkin_ws/devel/lib/python3/dist-packages",
+        "/opt/ros/noetic/lib/python3/dist-packages"
+    ],
+    "python.analysis.extraPaths": [
+        "/home/aorta-scan/auto_liver_ultrasound/catkin_ws/devel/lib/python3/dist-packages",
+        "/home/aorta-scan/spine_scan/Felix/catkin_ws/devel/lib/python3/dist-packages",
+        "/home/aorta-scan/catkin_ws/devel/lib/python3/dist-packages",
+        "/opt/ros/noetic/lib/python3/dist-packages"
+    ]
+}

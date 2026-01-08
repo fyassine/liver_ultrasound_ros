@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>trajectory_replay</name>
+  <version>0.0.0</version>
+  <description>Trajectory replay with MoveIt and Gazebo visualization</description>
+  <maintainer email="user@todo.todo">user</maintainer>
+  <license>TODO</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  
+  <exec_depend>gazebo_ros</exec_depend>
+  <exec_depend>iiwa_description</exec_depend>
+  <exec_depend>iiwa_control</exec_depend>
+  <exec_depend>iiwa_moveit</exec_depend>
+  <exec_depend>robot_state_publisher</exec_depend>
+  <exec_depend>joint_state_controller</exec_depend>
+  <exec_depend>position_controllers</exec_depend>
+  <exec_depend>moveit_ros_move_group</exec_depend>
+  <exec_depend>moveit_planners_ompl</exec_depend>
+  <exec_depend>moveit_ros_visualization</exec_depend>
+  <exec_depend>xacro</exec_depend>
+  
+</package>

@@ -164,27 +164,21 @@ def main():
     p.add_argument('--show', action='store_true', help='Show plots (not recommended in headless)')
     args = p.parse_args()
 
-    # Prefer using provided CSVs. If not provided, try to auto-discover CSVs in
-    # the current directory and in the usual `src/iiwa_trajectory/bags` folder.
     cart_csv = args.cartesian_csv
     joint_csv = args.joint_csv
 
     def discover_csvs():
         candidates = []
-        # search cwd
         candidates += glob.glob(os.path.join(os.getcwd(), '*_cartesian_pose.csv'))
         candidates += glob.glob(os.path.join(os.getcwd(), '*_joint_positions.csv'))
-        # search repo's bags directory
         repo_bags = os.path.join(os.path.dirname(__file__), '..', 'bags')
         repo_bags = os.path.normpath(repo_bags)
         candidates += glob.glob(os.path.join(repo_bags, '*_cartesian_pose.csv'))
         candidates += glob.glob(os.path.join(repo_bags, '*_joint_positions.csv'))
         return list(sorted(set(candidates)))
 
-    # If no explicit CSVs, try to find matching files
     if cart_csv is None or joint_csv is None:
         found = discover_csvs()
-        # map found names
         found_cart = [f for f in found if f.endswith('_cartesian_pose.csv')]
         found_joint = [f for f in found if f.endswith('_joint_positions.csv')]
         if not cart_csv and found_cart:
@@ -192,7 +186,6 @@ def main():
         if not joint_csv and found_joint:
             joint_csv = found_joint[0]
 
-    # If still missing CSVs, but --bag provided, run inspect_bag to generate them
     if (cart_csv is None or joint_csv is None) and args.bag:
         print('CSV files not found — invoking inspect_bag to generate CSVs from bag...')
         inspect_script = os.path.join(os.path.dirname(__file__), 'inspect_bag.py')
@@ -200,7 +193,6 @@ def main():
             subprocess.run([inspect_script, args.bag], check=True)
         except Exception as e:
             print(f'Failed to run inspect_bag: {e}')
-        # after running, try to infer CSV paths from bag
         bag_base = os.path.splitext(os.path.basename(args.bag))[0]
         bag_dir = os.path.dirname(os.path.abspath(args.bag)) or os.getcwd()
         if cart_csv is None:
@@ -212,7 +204,6 @@ def main():
             if os.path.exists(candidate):
                 joint_csv = candidate
 
-    # Final check
     if cart_csv is None or joint_csv is None:
         print('CSV files not found. Provide --bag to generate them or place CSVs in working dir.')
         return 1

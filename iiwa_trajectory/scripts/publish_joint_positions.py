@@ -17,7 +17,7 @@ except Exception:
 
 
 
-DEFAULT_BAG = os.path.normpath(os.path.join(os.path.dirname(__file__), '..', 'bags', 'recorded_trajectory_iiwa.bag'))
+DEFAULT_BAG = os.path.normpath(os.path.join(os.path.dirname(__file__), '..', 'bags', 'recorded_joint_positions.bag'))
 DEFAULT_READ_TOPIC = '/iiwa/state/JointPosition'
 DEFAULT_PUBLISH_TOPIC = '/iiwa/command/JointPosition'
 
@@ -106,7 +106,11 @@ def main():
     p.add_argument('--speed', '-s', type=float, default=1.0, help='Playback speed multiplier')
     p.add_argument('--loop', '-l', action='store_true', help='Loop playback')
     p.add_argument('--verbose', '-v', action='store_true', help='Verbose output')
-    args = p.parse_args()
+    if rospy is not None:
+        raw_argv = rospy.myargv(argv=sys.argv)
+        args = p.parse_args(raw_argv[1:])
+    else:
+        args, _ = p.parse_known_args()
 
     bag_path = args.bag
     if not os.path.exists(bag_path):
