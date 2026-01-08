@@ -1,0 +1,28 @@
+{
+  "configurations": [
+    {
+      "browse": {
+        "databaseFilename": "${default}",
+        "limitSymbolsToIncludedHeaders": false
+      },
+      "includePath": [
+        "/home/aorta-scan/auto_liver_ultrasound/catkin_ws/devel/include/**",
+        "/home/aorta-scan/spine_scan/Felix/catkin_ws/devel/include/**",
+        "/home/aorta-scan/catkin_ws/devel/include/**",
+        "/opt/ros/noetic/include/**",
+        "/home/aorta-scan/auto_liver_ultrasound/catkin_ws/src/iiwa_hw/include/**",
+        "/home/aorta-scan/auto_liver_ultrasound/catkin_ws/src/iiwa_ros/include/**",
+        "/home/aorta-scan/auto_liver_ultrasound/catkin_ws/src/iiwa_trajectory/include/**",
+        "/home/aorta-scan/catkin_ws/src/ROS_VisionControl/src/include/**",
+        "/home/aorta-scan/spine_scan/Felix/catkin_ws/src/rob_us/include/**",
+        "/usr/include/**"
+      ],
+      "name": "ROS",
+      "intelliSenseMode": "gcc-x64",
+      "compilerPath": "/usr/bin/gcc",
+      "cStandard": "gnu11",
+      "cppStandard": "c++14"
+    }
+  ],
+  "version": 4
+}
