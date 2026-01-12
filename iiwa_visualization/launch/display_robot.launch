@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<launch>
+  <!-- Robot configuration -->
+  <arg name="robot_name" default="iiwa"/>
+  <arg name="model" default="iiwa7"/>
+  <arg name="hardware_interface" default="PositionJointInterface"/>
+  <arg name="robot_base_frame" default="iiwa_link_0"/>
+  <arg name="robot_effector_frame" default="iiwa_link_ee"/>
+  
+  <!-- Visualization -->
+  <arg name="world_frame" default="world"/>
+  <arg name="publish_world_tf" default="true"/>
+  <arg name="world_to_robot_xyz" default="0 0 0"/>
+  <arg name="world_to_robot_rpy" default="0 0 0"/>
+
+  <!-- Start robot + MoveIt with RViz -->
+  <include file="$(find iiwa_moveit)/launch/moveit_planning_execution.launch">
+    <arg name="sim" value="false"/>
+    <arg name="rviz" value="true"/>
+    <arg name="hardware_interface" value="$(arg hardware_interface)"/>
+    <arg name="robot_name" value="$(arg robot_name)"/>
+    <arg name="model" value="$(arg model)"/>
+  </include>
+
+  <!-- World frame publisher -->
+  <group if="$(arg publish_world_tf)">
+    <node name="world_to_$(arg robot_base_frame)" pkg="tf" type="static_transform_publisher"
+          args="$(arg world_to_robot_xyz) $(arg world_to_robot_rpy) $(arg world_frame) $(arg robot_base_frame) 30"/>
+  </group>
+
+  <!-- Relay joint states from /iiwa/joint_states to /joint_states for visualization -->
+  <node name="joint_state_relay" pkg="topic_tools" type="relay" args="/iiwa/joint_states /joint_states" respawn="true"/>
+
+
+</launch>
