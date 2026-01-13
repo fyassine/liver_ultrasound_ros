@@ -86,7 +86,7 @@ class HandeyeCalibrationBackendOpenCV(object):
 
         method = self.AVAILABLE_ALGORITHMS[algorithm]
 
-        # This is the exact same call that easy_handeye makes
+    
         hand_camera_rot, hand_camera_tr = cv2.calibrateHandEye(
             hand_world_rot, hand_world_tr, 
             marker_camera_rot, marker_camera_tr, 
