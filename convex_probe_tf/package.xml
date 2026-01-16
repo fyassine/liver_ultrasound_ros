@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>convex_probe_tf</name>
+  <version>1.0.0</version>
+  <description>Publishes TF from iiwa_link_ee to convex_probe_tip</description>
+  <maintainer email="aorta-scan@example.com">aorta-scan</maintainer>
+  <license>MIT</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <exec_depend>tf</exec_depend>
+</package>

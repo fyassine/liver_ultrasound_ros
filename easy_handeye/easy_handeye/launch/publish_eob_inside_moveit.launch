@@ -32,8 +32,8 @@
   <arg name="depth_mode" value="NFOV_2X2BINNED"/>
   <arg name="color_resolution" value="720P"/>
   <arg name="fps" value="5"/>
-  <arg name="rgb_point_cloud" value="false"/>
-  <arg name="point_cloud" value="false"/>
+  <arg name="rgb_point_cloud" value="true"/>
+  <arg name="point_cloud" value="true"/>
 
   <!-- Visualization -->
   <arg name="world_frame" default="world"/>

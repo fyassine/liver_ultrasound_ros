@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<launch>
+  <!-- Z offset from iiwa_link_ee to convex probe tip (in meters) -->
+  <arg name="z_offset" default="0.208"/>
+
+  <!-- Publish static TF: iiwa_link_ee -> convex_probe_tip -->
+  <node pkg="tf" type="static_transform_publisher" name="convex_probe_tf_publisher"
+        args="0 0 $(arg z_offset) 0 0 0 iiwa_link_ee convex_probe_tip 100"/>
+</launch>
