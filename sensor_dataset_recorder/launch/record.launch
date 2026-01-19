@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<launch>
+  <!-- Arguments -->
+  <arg name="output_dir" default="$(env HOME)/datasets/liver_ultrasound"/>
+  <arg name="duration" default="0"/>
+  <arg name="robot_name" default="iiwa"/>
+
+  <!-- Load robot URDF -->
+  <include file="$(find iiwa_description)/launch/iiwa7_upload.launch">
+    <arg name="robot_name" value="$(arg robot_name)"/>
+  </include>
+
+  <!-- Convert IIWA custom messages to standard ROS messages -->
+  <!-- This republishes /iiwa/state/JointPosition as /iiwa/state/JointPosition_standard (sensor_msgs/JointState) -->
+  <node pkg="iiwa_trajectory" type="topics_republisher.py" name="topics_republisher" output="screen"/>
+
+  <!-- Relay the republished joint state to /joint_states for robot_state_publisher -->
+  <node name="joint_state_relay" pkg="topic_tools" type="relay"
+        args="/$(arg robot_name)/state/JointPosition_standard /joint_states" respawn="true"/>
+
+  <!-- Robot State Publisher - reads /joint_states and publishes TF for all robot links -->
+  <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher_mcap"/>
+
+  <!-- World frame: world -> iiwa_link_0 -->
+  <node name="world_to_iiwa" pkg="tf" type="static_transform_publisher"
+        args="0 0 0 0 0 0 world iiwa_link_0 100"/>
+
+  <!-- MCAP Recorder -->
+  <node pkg="sensor_dataset_recorder" type="record_mcap.py" name="mcap_recorder" output="screen">
+    <param name="~output_dir" value="$(arg output_dir)"/>
+    <param name="~duration" value="$(arg duration)" if="$(eval duration > 0)"/>
+  </node>
+</launch>
