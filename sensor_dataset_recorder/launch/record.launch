@@ -1,33 +1,50 @@
 <?xml version="1.0"?>
 <launch>
+  <!-- 
+    MCAP Recorder - records robot + camera data
+    NOTE: Camera driver must be started separately from the machine (not SSH)
+    Use: roslaunch easy_handeye camera_only.launch
+  -->
+
   <!-- Arguments -->
   <arg name="output_dir" default="$(env HOME)/datasets/liver_ultrasound"/>
   <arg name="duration" default="0"/>
   <arg name="robot_name" default="iiwa"/>
+  <arg name="recording_fps" default="30"/>
 
   <!-- Load robot URDF -->
-  <include file="$(find iiwa_description)/launch/iiwa7_upload.launch">
-    <arg name="robot_name" value="$(arg robot_name)"/>
-  </include>
+  <param name="robot_description" 
+         command="$(find xacro)/xacro '$(find iiwa_description)/urdf/iiwa7.urdf.xacro' 
+                  hardware_interface:=PositionJointInterface 
+                  robot_name:=$(arg robot_name)"/>
 
-  <!-- Convert IIWA custom messages to standard ROS messages -->
-  <!-- This republishes /iiwa/state/JointPosition as /iiwa/state/JointPosition_standard (sensor_msgs/JointState) -->
+  <!-- Convert IIWA custom messages to standard JointState -->
   <node pkg="iiwa_trajectory" type="topics_republisher.py" name="topics_republisher" output="screen"/>
 
-  <!-- Relay the republished joint state to /joint_states for robot_state_publisher -->
+  <!-- Relay to /joint_states for robot_state_publisher -->
   <node name="joint_state_relay" pkg="topic_tools" type="relay"
         args="/$(arg robot_name)/state/JointPosition_standard /joint_states" respawn="true"/>
 
-  <!-- Robot State Publisher - reads /joint_states and publishes TF for all robot links -->
-  <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher_mcap"/>
+  <!-- Robot State Publisher -->
+  <node pkg="robot_state_publisher" type="robot_state_publisher" name="iiwa_state_publisher"/>
 
-  <!-- World frame: world -> iiwa_link_0 -->
+  <!-- World frame -->
   <node name="world_to_iiwa" pkg="tf" type="static_transform_publisher"
         args="0 0 0 0 0 0 world iiwa_link_0 100"/>
+
+  <!-- Convex probe tip TF -->
+  <include file="$(find convex_probe_tf)/launch/convex_probe_tf.launch"/>
+
+  <!-- Hand-eye calibration TF (camera to end-effector) -->
+  <include file="$(find easy_handeye)/launch/publish.launch">
+    <arg name="namespace_prefix" value="my_eih_calib"/>
+    <arg name="eye_on_hand" value="true"/>
+  </include>
 
   <!-- MCAP Recorder -->
   <node pkg="sensor_dataset_recorder" type="record_mcap.py" name="mcap_recorder" output="screen">
     <param name="~output_dir" value="$(arg output_dir)"/>
     <param name="~duration" value="$(arg duration)" if="$(eval duration > 0)"/>
+    <param name="~recording_fps" value="$(arg recording_fps)"/>
   </node>
 </launch>
