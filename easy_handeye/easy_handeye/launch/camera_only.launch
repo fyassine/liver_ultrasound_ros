@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<launch>
+  <!-- Calibration namespace -->
+  <arg name="namespace_prefix" default="my_eih_calib"/>
+  
+  <!-- Azure Kinect settings (matching publish_eih_inside_moveit.launch) -->
+  <arg name="depth_mode" default="NFOV_2X2BINNED"/>
+  <arg name="color_resolution" default="720P"/>
+  <arg name="fps" default="5"/>
+  <arg name="point_cloud" default="false"/>
+  <arg name="rgb_point_cloud" default="false"/>
+
+  <!-- Azure Kinect camera driver -->
+  <!-- Set overwrite_robot_description=false to keep our IIWA URDF -->
+  <include file="$(find azure_kinect_ros_driver)/launch/driver.launch">
+    <arg name="overwrite_robot_description" value="false"/>
+    <arg name="depth_mode" value="$(arg depth_mode)"/>
+    <arg name="color_resolution" value="$(arg color_resolution)"/>
+    <arg name="fps" value="$(arg fps)"/>
+    <arg name="point_cloud" value="$(arg point_cloud)"/>
+    <arg name="rgb_point_cloud" value="$(arg rgb_point_cloud)"/>
+  </include>
+
+  <!-- Publish calibrated hand-eye transform (Eye-in-Hand) -->
+  <include file="$(find easy_handeye)/launch/publish.launch">
+    <arg name="namespace_prefix" value="$(arg namespace_prefix)"/>
+    <arg name="eye_on_hand" value="true"/>
+  </include>
+</launch>
