@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<launch>
+  <!-- 
+    Ultrasound video capture from Magewell USB Capture HDMI+
+    Device: /dev/video2
+    Supports: up to 1920x1080 @ 60fps
+    
+    Publishes:
+      /ultrasound_camera/image_raw - raw from capture card
+      /ultrasound/image_raw - cropped and rotated (for recording)
+  -->
+
+  <!-- Device settings -->
+  <arg name="video_device" default="/dev/video2"/>
+  <arg name="image_width" default="1920"/>
+  <arg name="image_height" default="1080"/>
+  <arg name="framerate" default="30"/>
+  <arg name="pixel_format" default="yuyv"/>
+  
+  <!-- Crop settings (pixels to remove) -->
+  <arg name="crop_top" default="500"/>
+  <arg name="crop_bottom" default="200"/>
+  <arg name="rotation" default="90"/>
+
+  <!-- USB Camera node -->
+  <node name="ultrasound_camera" pkg="usb_cam" type="usb_cam_node" output="screen">
+    <param name="video_device" value="$(arg video_device)"/>
+    <param name="image_width" value="$(arg image_width)"/>
+    <param name="image_height" value="$(arg image_height)"/>
+    <param name="framerate" value="$(arg framerate)"/>
+    <param name="pixel_format" value="$(arg pixel_format)"/>
+    <param name="camera_name" value="ultrasound_camera"/>
+    <param name="camera_frame_id" value="ultrasound_frame"/>
+    <param name="io_method" value="mmap"/>
+  </node>
+
+  <!-- Image processor (crop + rotate) -->
+  <node name="ultrasound_processor" pkg="ultrasound_capture" type="ultrasound_processor.py" output="screen">
+    <param name="input_topic" value="/ultrasound_camera/image_raw"/>
+    <param name="output_topic" value="/ultrasound/image_raw"/>
+    <param name="crop_top" value="$(arg crop_top)"/>
+    <param name="crop_bottom" value="$(arg crop_bottom)"/>
+    <param name="rotation" value="$(arg rotation)"/>
+  </node>
+</launch>
