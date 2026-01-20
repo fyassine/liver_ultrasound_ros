@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<launch>
+  <!--
+    Trajectory replay from MCAP file.
+    
+    Usage:
+      roslaunch sensor_dataset_recorder replay.launch mcap_file:=$(rospack find sensor_dataset_recorder)/../../../datasets/file.mcap
+      roslaunch sensor_dataset_recorder replay.launch mcap_file:=/full/path/to/file.mcap
+  -->
+
+  <!-- Required: Path to MCAP file -->
+  <arg name="mcap_file"/>
+  
+  <!-- Optional: Replay settings -->
+  <arg name="rate" default="30.0"/>
+  <arg name="speed" default="1.0"/>
+
+  <!-- Trajectory Replayer -->
+  <node pkg="sensor_dataset_recorder" type="replay_trajectory.py" name="trajectory_replayer" 
+        output="screen">
+    <param name="mcap_file" value="$(arg mcap_file)"/>
+    <param name="rate" value="$(arg rate)"/>
+    <param name="speed" value="$(arg speed)"/>
+  </node>
+</launch>
