@@ -8,6 +8,7 @@
     Publishes:
       /ultrasound_camera/image_raw - raw from capture card
       /ultrasound/image_raw - cropped and rotated (for recording)
+      /ultrasound/pixel_size_cm - pixel size in cm
   -->
 
   <!-- Device settings -->
@@ -18,9 +19,11 @@
   <arg name="pixel_format" default="yuyv"/>
   
   <!-- Crop settings (pixels to remove) -->
-  <arg name="crop_top" default="500"/>
-  <arg name="crop_bottom" default="200"/>
-  <arg name="rotation" default="90"/>
+  <arg name="crop_top" default="325"/>
+  <arg name="crop_bottom" default="595"/>
+  <arg name="rotation" default="270"/>
+  
+  <arg name="depth_cm" default="16.0"/>
 
   <!-- USB Camera node -->
   <node name="ultrasound_camera" pkg="usb_cam" type="usb_cam_node" output="screen">
@@ -34,12 +37,15 @@
     <param name="io_method" value="mmap"/>
   </node>
 
-  <!-- Image processor (crop + rotate) -->
+  <!-- Image processor (crop + rotate + pixel size) -->
   <node name="ultrasound_processor" pkg="ultrasound_capture" type="ultrasound_processor.py" output="screen">
     <param name="input_topic" value="/ultrasound_camera/image_raw"/>
     <param name="output_topic" value="/ultrasound/image_raw"/>
     <param name="crop_top" value="$(arg crop_top)"/>
     <param name="crop_bottom" value="$(arg crop_bottom)"/>
     <param name="rotation" value="$(arg rotation)"/>
+    <param name="depth_cm" value="$(arg depth_cm)"/>
+    <param name="image_width" value="$(arg image_width)"/>
+    <param name="image_height" value="$(arg image_height)"/>
   </node>
 </launch>
