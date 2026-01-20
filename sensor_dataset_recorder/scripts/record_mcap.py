@@ -14,9 +14,10 @@ from datetime import datetime
 
 import rospy
 from mcap_ros1.writer import Writer as McapWriter
-from iiwa_msgs.msg import JointPosition, JointTorque
+from iiwa_msgs.msg import JointPosition, JointTorque, CartesianWrench
 from sensor_msgs.msg import JointState, Image
 from tf2_msgs.msg import TFMessage
+from audio_common_msgs.msg import AudioData
 
 
 class McapRecorder:
@@ -39,13 +40,14 @@ class McapRecorder:
         self.topics = {
             '/iiwa/state/JointPosition': JointPosition,
             '/iiwa/state/JointTorque': JointTorque,
+            '/iiwa/state/CartesianWrench': CartesianWrench,
             '/joint_states': JointState,
-
             '/tf': TFMessage,
             '/tf_static': TFMessage,
-
             '/rgb/image_raw': Image,
             '/depth_to_rgb/image_raw': Image,
+            
+            '/audio/audio': AudioData,
         }
         
         self.subscribers = []
