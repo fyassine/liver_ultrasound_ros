@@ -6,7 +6,7 @@
   <!-- Azure Kinect settings (matching publish_eih_inside_moveit.launch) -->
   <arg name="depth_mode" default="NFOV_2X2BINNED"/>
   <arg name="color_resolution" default="720P"/>
-  <arg name="fps" default="5"/>
+  <arg name="fps" default="30"/>
   <arg name="point_cloud" default="false"/>
   <arg name="rgb_point_cloud" default="false"/>
 
