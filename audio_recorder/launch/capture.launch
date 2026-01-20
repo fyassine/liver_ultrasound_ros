@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<launch>
+  <!--
+    Audio capture launch file using audio_common package.
+    
+    Usage:
+      roslaunch audio_recorder capture.launch
+      roslaunch audio_recorder capture.launch device:=hw:1,0
+      
+    To list available devices:
+      arecord -l
+  -->
+
+  <!-- Audio device (ALSA format: hw:CARD,DEVICE or "default") -->
+  <arg name="device" default=""/>
+  
+  <!-- Audio format settings -->
+  <arg name="sample_rate" default="44100"/>
+  <arg name="channels" default="1"/>
+  <arg name="depth" default="16"/>
+  <arg name="sample_format" default="S16LE"/>
+  
+  <!-- Output topic -->
+  <arg name="ns" default="audio"/>
+
+  <!-- Audio capture node from audio_common -->
+  <node pkg="audio_capture" type="audio_capture" name="audio_capture" 
+        ns="$(arg ns)" output="screen">
+    <param name="device" value="$(arg device)" if="$(eval device != '')"/>
+    <param name="sample_rate" value="$(arg sample_rate)"/>
+    <param name="channels" value="$(arg channels)"/>
+    <param name="depth" value="$(arg depth)"/>
+    <param name="sample_format" value="$(arg sample_format)"/>
+  </node>
+</launch>
