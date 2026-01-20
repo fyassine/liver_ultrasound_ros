@@ -46,7 +46,7 @@ class McapRecorder:
             '/tf_static': TFMessage,
             '/rgb/image_raw': Image,
             '/depth_to_rgb/image_raw': Image,
-            
+            '/ultrasound/image_raw': Image,
             '/audio/audio': AudioData,
         }
         
