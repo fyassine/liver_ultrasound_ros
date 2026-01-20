@@ -1,0 +1,82 @@
+Panels:
+  - Class: rviz/Displays
+    Name: Displays
+  - Class: rviz/Views
+    Name: Views
+
+Visualization Manager:
+  Class: ""
+  Displays:
+    # Robot Model
+    - Class: rviz/RobotModel
+      Name: Robot
+      Robot Description: robot_description
+      TF Prefix: ""
+      Enabled: true
+
+    # TF Frames
+    - Class: rviz/TF
+      Name: TF
+      Enabled: true
+      Frame Timeout: 15
+      Show Arrows: true
+      Show Axes: true
+      Show Names: true
+
+    # Point Cloud (phantom visualization)
+    - Class: rviz/PointCloud2
+      Name: PointCloud
+      Topic: /points2
+      Enabled: true
+      Size (m): 0.01
+      Style: Points
+      Color Transformer: RGB8
+
+    # RGB Camera Image
+    - Class: rviz/Image
+      Name: RGB Camera
+      Image Topic: /rgb/image_raw
+      Enabled: true
+      Max Value: 1
+      Median window: 5
+      Min Value: 0
+      Transport Hint: raw
+
+    # Ultrasound Video
+    - Class: rviz/Image
+      Name: Ultrasound Video
+      Image Topic: /ultrasound/image_raw
+      Enabled: true
+      Max Value: 1
+      Median window: 5
+      Min Value: 0
+      Transport Hint: raw
+
+  Global Options:
+    Background Color: 48; 48; 48
+    Fixed Frame: world
+    Frame Rate: 30
+
+  Tools:
+    - Class: rviz/Interact
+    - Class: rviz/MoveCamera
+    - Class: rviz/FocusCamera
+
+  Views:
+    Current:
+      Class: rviz/Orbit
+      Distance: 2
+      Focal Point:
+        X: 0
+        Y: 0
+        Z: 0.5
+      Name: Current View
+      Pitch: 0.5
+      Target Frame: <Fixed Frame>
+      Yaw: 0.8
+
+Window Geometry:
+  Height: 800
+  Width: 1200
+  X: 100
+  Y: 100

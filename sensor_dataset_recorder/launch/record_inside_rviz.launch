@@ -1,0 +1,78 @@
+<?xml version="1.0"?>
+<launch>
+  <!-- 
+    Interactive MCAP Recorder with RViz visualization
+    
+    NOTE: If camera fails via SSH, start camera_only.launch from the machine first,
+          then run this with start_camera:=false
+    
+    Usage:
+      roslaunch sensor_dataset_recorder record_inside_rviz.launch
+      roslaunch sensor_dataset_recorder record_inside_rviz.launch start_camera:=false
+  -->
+
+  <!-- Arguments -->
+  <arg name="output_dir" default="$(env HOME)/datasets/liver_ultrasound"/>
+  <arg name="duration" default="0"/>
+  <arg name="robot_name" default="iiwa"/>
+  <arg name="recording_fps" default="30"/>
+  
+  <!-- Optional: skip camera if launching separately due to SSH issues -->
+  <arg name="start_camera" default="true"/>
+  <arg name="start_ultrasound" default="true"/>
+
+  <!-- Robot config -->
+  <arg name="hardware_interface" default="PositionJointInterface"/>
+  
+  <!-- Camera config -->
+  <arg name="depth_mode" default="NFOV_2X2BINNED"/>
+  <arg name="color_resolution" default="720P"/>
+  <arg name="camera_fps" default="30"/>
+
+  <!-- ==================== Robot Setup ==================== -->
+  
+  <!-- Load robot URDF -->
+  <param name="robot_description" 
+         command="$(find xacro)/xacro '$(find iiwa_description)/urdf/iiwa7.urdf.xacro' 
+                  hardware_interface:=$(arg hardware_interface) 
+                  robot_name:=$(arg robot_name)"/>
+
+  <!-- Convert IIWA custom messages to standard JointState -->
+  <node pkg="iiwa_trajectory" type="topics_republisher.py" name="topics_republisher" output="screen"/>
+
+  <!-- Relay to /joint_states for robot_state_publisher -->
+  <node name="joint_state_relay" pkg="topic_tools" type="relay"
+        args="/$(arg robot_name)/state/JointPosition_standard /joint_states" respawn="true"/>
+
+  <!-- Robot State Publisher (TF) -->
+  <node pkg="robot_state_publisher" type="robot_state_publisher" name="iiwa_state_publisher"/>
+
+  <!-- World frame -->
+  <node name="world_to_iiwa" pkg="tf" type="static_transform_publisher"
+        args="0 0 0 0 0 0 world iiwa_link_0 100"/>
+
+  <!-- Convex probe tip TF -->
+  <include file="$(find convex_probe_tf)/launch/convex_probe_tf.launch"/>
+
+  <!-- Hand-eye calibration TF -->
+  <include file="$(find easy_handeye)/launch/publish.launch">
+    <arg name="namespace_prefix" value="my_eih_calib"/>
+    <arg name="eye_on_hand" value="true"/>
+  </include>
+
+  <!-- ==================== RViz ==================== -->
+  
+  <node name="rviz" pkg="rviz" type="rviz" 
+        args="-d $(find sensor_dataset_recorder)/config/record.rviz" 
+        output="screen"/>
+
+  <!-- ==================== MCAP Recorder ==================== -->
+  
+  <node pkg="sensor_dataset_recorder" type="record_mcap_interactive.py" name="mcap_recorder" 
+        output="screen" launch-prefix="xterm -e">
+    <param name="~output_dir" value="$(arg output_dir)"/>
+    <param name="~duration" value="$(arg duration)" if="$(eval duration > 0)"/>
+    <param name="~recording_fps" value="$(arg recording_fps)"/>
+    <param name="~wait_for_input" value="true"/>
+  </node>
+</launch>
