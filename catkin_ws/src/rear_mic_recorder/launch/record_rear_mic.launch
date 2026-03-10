@@ -5,7 +5,7 @@
   <arg name="channels" default="2"/>
   <arg name="sample_format" default="S16_LE"/>
   <arg name="duration" default="0"/>
-  <arg name="output_dir" default="data"/>
+  <arg name="output_dir" default="data/mic_recordings"/>
   <arg name="filename_prefix" default="rear_mic"/>
   <arg name="filename" default=""/>
 

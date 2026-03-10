@@ -15,7 +15,7 @@ class RearMicRecorder:
         self.channels = int(rospy.get_param("~channels", 2))
         self.sample_format = rospy.get_param("~sample_format", "S16_LE")
         self.duration = int(rospy.get_param("~duration", 0))
-        self.output_dir = rospy.get_param("~output_dir", "data")
+        self.output_dir = rospy.get_param("~output_dir", "data/mic_recordings")
         self.filename_prefix = rospy.get_param("~filename_prefix", "rear_mic")
         self.filename = rospy.get_param("~filename", "")
         self.process = None
