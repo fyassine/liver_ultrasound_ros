@@ -16,7 +16,7 @@ GRUB_CMDLINE_LINUX_DEFAULT="quiet splash usbcore.usbfs_memory_mb=1000"
 4. Restart your PC: `sudo reboot`.
 5. Verify the change by running: `cat /sys/module/usbcore/parameters/usbfs_memory_mb` (it should return `1000`).
 
-### 2. Calibrate Cameras Separately
+### 2. Calibrate Cameras Separately (more details under: https://github.com/Chiararipiemon/IFL_calibration)
 
 * **Find Serial Numbers:** To find the correct serial number for **EOB** (eye-on-base) or **EIH** (eye-in-hand), use the `k4aviewer` GUI or run:
 ```bash
