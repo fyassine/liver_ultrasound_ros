@@ -40,8 +40,7 @@ roslaunch easy_handeye publish_dual_inside_moveit.launch enable_eob:=true enable
 ```
 
 <img width="3446" height="1544" alt="image" src="https://github.com/user-attachments/assets/0c442f07-7244-4494-8ffa-ed16f6eceeec" />
-
-<img width="456" height="604" alt="image" src="https://github.com/user-attachments/assets/1de97c7f-cd79-4cb8-8437-37c22d14eb77" />
+<img width="432" height="574" alt="image" src="https://github.com/user-attachments/assets/5c2db37f-450b-469c-bbc8-7f22c8c4bf25" />
 
 
 
