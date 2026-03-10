@@ -40,7 +40,8 @@ roslaunch easy_handeye publish_dual_inside_moveit.launch enable_eob:=true enable
 ```
 
 <img width="3446" height="1544" alt="image" src="https://github.com/user-attachments/assets/0c442f07-7244-4494-8ffa-ed16f6eceeec" />
-![IMG_6632](https://github.com/user-attachments/assets/cf19eb31-e279-47a9-88b0-057206e0068c)
+<img width="3446" height="1544" alt="image" src="https://github.com/user-attachments/assets/6ebf0fc5-26fa-4d94-a472-43d4a7621f5c" />
+
 
 
 # Microphone
