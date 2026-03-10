@@ -3,6 +3,7 @@
 ### 1. Drivers and Settings
 
 * **Install K4a driver for Kinect:**
+<img width="2894" height="1472" alt="image" src="https://github.com/user-attachments/assets/e06eee4b-f308-4e2f-b612-0175c7ca1732" />
 * **Update GRUB usbfs limit:**
 *(Reference: [Azure Kinect ROS Driver Issue #97](https://github.com/microsoft/Azure_Kinect_ROS_Driver/issues/97))*
 By default, Linux limits image capturing to a maximum of 16 MB. To increase this:
