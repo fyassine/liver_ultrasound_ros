@@ -156,7 +156,7 @@ foreach(library ${libraries})
     set(lib_path "")
     set(lib "${library}-NOTFOUND")
     # since the path where the library is found is returned we have to iterate over the paths manually
-    foreach(path /home/aorta-scan/fyassine/auto_liver_ultrasound/catkin_ws/devel/lib;/home/aorta-scan/spine_scan/Felix/catkin_ws/devel/lib;/home/aorta-scan/catkin_ws/devel/lib;/opt/ros/noetic/lib)
+    foreach(path /home/aorta-scan/fyassine/auto_liver_ultrasound/catkin_ws/devel/lib;/home/aorta-scan/fyassine/auto_liver_ultrasound/catkin_ws/devel/lib;/home/aorta-scan/spine_scan/Felix/catkin_ws/devel/lib;/home/aorta-scan/catkin_ws/devel/lib;/opt/ros/noetic/lib)
       find_library(lib ${library}
         PATHS ${path}
         NO_DEFAULT_PATH NO_CMAKE_FIND_ROOT_PATH)

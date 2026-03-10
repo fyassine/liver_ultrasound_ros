@@ -17,6 +17,8 @@
   <!-- CALIBRATION NAMES (Must match your saved files) -->
   <arg name="eih_calib_name" default="my_eih_calib"/>
   <arg name="eob_calib_name" default="my_eob_calib"/>
+  <arg name="eih_calibration_file" default="$(env HOME)/.ros/easy_handeye/my_eih_calib_eye_on_hand.yaml"/>
+  <arg name="eob_calibration_file" default="$(env HOME)/.ros/easy_handeye/my_eob_calib_eye_on_base.yaml"/>
 
   <!-- ROBOT CONFIGURATION -->
   <arg name="robot_name" default="iiwa"/>
@@ -30,7 +32,11 @@
   <arg name="color_enabled" default="true"/>
   <arg name="color_resolution" default="720P"/> <!-- Try 720P or 360P -->
   <arg name="fps" default="5"/>
-  <arg name="base_camera_startup_delay" default="0"/>
+  <arg name="point_cloud" default="false"/>
+  <arg name="rgb_point_cloud" default="false"/>
+  <arg name="eih_calibration_url" default="file://$(env HOME)/.ros/camera_info"/>
+  <arg name="eob_calibration_url" default="file://$(env HOME)/.ros/camera_info"/>
+  <arg name="base_camera_startup_delay" default="10"/>
   <arg name="enable_aruco" default="true"/>
 
   <!-- ARUCO SETTINGS -->
@@ -81,10 +87,13 @@
     <include file="$(find azure_kinect_ros_driver)/launch/driver.launch">
       <arg name="tf_prefix" value="$(arg tf_prefix)"/>
       <arg name="sensor_sn" value="$(arg eih_serial_no)"/>
+      <arg name="calibration_url" value="$(arg eih_calibration_url)"/>
       <arg name="depth_mode" value="$(arg depth_mode)"/>
       <arg name="color_enabled" value="$(arg color_enabled)"/>
       <arg name="color_resolution" value="$(arg color_resolution)"/>
       <arg name="fps" value="$(arg fps)"/>
+      <arg name="point_cloud" value="$(arg point_cloud)"/>
+      <arg name="rgb_point_cloud" value="$(arg rgb_point_cloud)"/>
       <!-- IMPORTANT: Prevent driver from trying to overwrite the Robot's description -->
       <arg name="overwrite_robot_description" value="false" />
     </include>
@@ -106,6 +115,7 @@
     <include file="$(find easy_handeye)/launch/publish.launch">
       <arg name="namespace_prefix" value="$(arg eih_calib_name)"/>
       <arg name="eye_on_hand" value="true"/>
+      <arg name="calibration_file" value="$(arg eih_calibration_file)"/>
       <arg name="robot_effector_frame" value="$(arg robot_effector_frame)"/>
       <arg name="tracking_base_frame" value="$(arg camera_base_frame)"/>
     </include>
@@ -124,13 +134,16 @@
 
     <!-- Azure Kinect Driver -->
     <include file="$(find azure_kinect_ros_driver)/launch/driver.launch">
-      <arg name="launch_prefix" value="bash -c 'sleep $(arg base_camera_startup_delay); $0 $@'" />
+      <arg name="launch_prefix" value="$(find easy_handeye)/scripts/delayed_start.sh $(arg base_camera_startup_delay)" />
       <arg name="tf_prefix" value="$(arg tf_prefix)"/>
       <arg name="sensor_sn" value="$(arg eob_serial_no)"/>
+      <arg name="calibration_url" value="$(arg eob_calibration_url)"/>
       <arg name="depth_mode" value="$(arg depth_mode)"/>
       <arg name="color_enabled" value="$(arg color_enabled)"/>
       <arg name="color_resolution" value="$(arg color_resolution)"/>
       <arg name="fps" value="$(arg fps)"/>
+      <arg name="point_cloud" value="$(arg point_cloud)"/>
+      <arg name="rgb_point_cloud" value="$(arg rgb_point_cloud)"/>
       <arg name="overwrite_robot_description" value="false" />
     </include>
 
@@ -151,6 +164,7 @@
     <include file="$(find easy_handeye)/launch/publish.launch">
       <arg name="namespace_prefix" value="$(arg eob_calib_name)"/>
       <arg name="eye_on_hand" value="false"/>
+      <arg name="calibration_file" value="$(arg eob_calibration_file)"/>
       <arg name="robot_base_frame" value="$(arg robot_base_frame)"/>
       <arg name="tracking_base_frame" value="$(arg camera_base_frame)"/>
     </include>

@@ -7,6 +7,7 @@ Licensed under the MIT License.
   <arg name="tf_prefix"         default="" />                       <!-- Prefix added to tf frame IDs. It typically contains a trailing '_' unless empty. -->
   <arg name="overwrite_robot_description" default="true" />         <!-- Flag to publish a standalone azure_description instead of the default robot_descrition parameter-->
   <arg name="launch_prefix" default="" />
+  <arg name="calibration_url" default="" />
 
   <group if="$(arg overwrite_robot_description)">
     <param name="robot_description"
@@ -61,6 +62,7 @@ Licensed under the MIT License.
     <param name="point_cloud_in_depth_frame"   type="bool"   value="$(arg point_cloud_in_depth_frame)" />
     <param name="sensor_sn"         type="string" value="$(arg sensor_sn)" />
     <param name="tf_prefix"         type="string" value="$(arg tf_prefix)" />
+    <param name="calibration_url"   type="string" value="$(arg calibration_url)" />
     <param name="recording_file"          type="string" value="$(arg recording_file)" />
     <param name="recording_loop_enabled"  type="bool"   value="$(arg recording_loop_enabled)" />
     <param name="body_tracking_enabled"           type="bool"   value="$(arg body_tracking_enabled)" />

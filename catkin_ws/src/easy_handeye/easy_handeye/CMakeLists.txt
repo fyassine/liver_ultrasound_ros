@@ -15,6 +15,11 @@ catkin_install_python(PROGRAMS
     DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 
+install(PROGRAMS
+    scripts/delayed_start.sh
+    DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+)
+
 install(FILES
     launch/calibrate.launch
     launch/publish.launch
