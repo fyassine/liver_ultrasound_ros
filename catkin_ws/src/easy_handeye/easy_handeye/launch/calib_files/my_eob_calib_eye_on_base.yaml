@@ -1,0 +1,18 @@
+parameters:
+  eye_on_hand: false
+  freehand_robot_movement: false
+  move_group: manipulator
+  move_group_namespace: /iiwa
+  namespace: /my_eob_calib_eye_on_base/
+  robot_base_frame: iiwa_link_0
+  robot_effector_frame: iiwa_link_ee
+  tracking_base_frame: camera_base
+  tracking_marker_frame: aruco_marker_frame
+transformation:
+  qw: 0.6448249589710122
+  qx: 0.05797631643671028
+  qy: 0.04613487974560515
+  qz: -0.7607306303096525
+  x: 0.7655796583141761
+  y: 0.9279378142010956
+  z: 0.3117747574076575

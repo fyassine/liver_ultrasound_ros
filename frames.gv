@@ -1,0 +1,21 @@
+digraph G {
+"iiwa_link_0" -> "iiwa_link_1"[label="Broadcaster: /iiwa/robot_state_publisher\nAverage rate: 63.327 Hz\nMost recent transform: 1773066874.149 ( 0.009 sec old)\nBuffer length: 4.990 sec\n"];
+"world" -> "iiwa_link_0"[label="Broadcaster: /world_to_iiwa_link_0\nAverage rate: 10000.000 Hz\nMost recent transform: 0.000 ( 1773066874.158 sec old)\nBuffer length: 0.000 sec\n"];
+"iiwa_link_1" -> "iiwa_link_2"[label="Broadcaster: /iiwa/robot_state_publisher\nAverage rate: 63.327 Hz\nMost recent transform: 1773066874.149 ( 0.009 sec old)\nBuffer length: 4.990 sec\n"];
+"iiwa_link_2" -> "iiwa_link_3"[label="Broadcaster: /iiwa/robot_state_publisher\nAverage rate: 63.327 Hz\nMost recent transform: 1773066874.149 ( 0.009 sec old)\nBuffer length: 4.990 sec\n"];
+"iiwa_link_3" -> "iiwa_link_4"[label="Broadcaster: /iiwa/robot_state_publisher\nAverage rate: 63.327 Hz\nMost recent transform: 1773066874.149 ( 0.009 sec old)\nBuffer length: 4.990 sec\n"];
+"iiwa_link_4" -> "iiwa_link_5"[label="Broadcaster: /iiwa/robot_state_publisher\nAverage rate: 63.327 Hz\nMost recent transform: 1773066874.149 ( 0.009 sec old)\nBuffer length: 4.990 sec\n"];
+"iiwa_link_5" -> "iiwa_link_6"[label="Broadcaster: /iiwa/robot_state_publisher\nAverage rate: 63.327 Hz\nMost recent transform: 1773066874.149 ( 0.009 sec old)\nBuffer length: 4.990 sec\n"];
+"iiwa_link_6" -> "iiwa_link_7"[label="Broadcaster: /iiwa/robot_state_publisher\nAverage rate: 63.327 Hz\nMost recent transform: 1773066874.149 ( 0.009 sec old)\nBuffer length: 4.990 sec\n"];
+"iiwa_link_0" -> "camera_base"[label="Broadcaster: /dummy_handeye\nAverage rate: 99.405 Hz\nMost recent transform: 1773066874.162 ( -0.004 sec old)\nBuffer length: 4.990 sec\n"];
+"camera_base" -> "depth_camera_link"[label="Broadcaster: /azure_kinect_ros_driver\nAverage rate: 10000.000 Hz\nMost recent transform: 0.000 ( 1773066874.158 sec old)\nBuffer length: 0.000 sec\n"];
+"depth_camera_link" -> "imu_link"[label="Broadcaster: /azure_kinect_ros_driver\nAverage rate: 10000.000 Hz\nMost recent transform: 0.000 ( 1773066874.158 sec old)\nBuffer length: 0.000 sec\n"];
+"depth_camera_link" -> "rgb_camera_link"[label="Broadcaster: /azure_kinect_ros_driver\nAverage rate: 10000.000 Hz\nMost recent transform: 0.000 ( 1773066874.158 sec old)\nBuffer length: 0.000 sec\n"];
+"camera_base" -> "camera_body"[label="Broadcaster: /robot_state_publisher\nAverage rate: 10000.000 Hz\nMost recent transform: 0.000 ( 1773066874.158 sec old)\nBuffer length: 0.000 sec\n"];
+"camera_base" -> "camera_visor"[label="Broadcaster: /robot_state_publisher\nAverage rate: 10000.000 Hz\nMost recent transform: 0.000 ( 1773066874.158 sec old)\nBuffer length: 0.000 sec\n"];
+"iiwa_link_7" -> "iiwa_link_ee"[label="Broadcaster: /iiwa/robot_state_publisher\nAverage rate: 10000.000 Hz\nMost recent transform: 0.000 ( 1773066874.158 sec old)\nBuffer length: 0.000 sec\n"];
+edge [style=invis];
+ subgraph cluster_legend { style=bold; color=black; label ="view_frames Result";
+"Recorded at time: 1773066874.158"[ shape=plaintext ] ;
+ }->"world";
+}

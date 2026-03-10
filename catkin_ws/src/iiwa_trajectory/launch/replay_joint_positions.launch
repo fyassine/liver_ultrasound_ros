@@ -1,0 +1,3 @@
+<launch>
+    <node name="iiwa_trajectory_replayer" pkg="iiwa_trajectory" type="publish_joint_positions.py" output="screen"/>
+</launch>

@@ -1,0 +1,3 @@
+<launch>
+    <node name="joint_positions_recorder" pkg="iiwa_trajectory" type="record_joint_positions.py" output="screen"/>
+</launch>

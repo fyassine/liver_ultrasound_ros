@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="eih_serial_no" default="000188401612"/>
+  <arg name="eob_serial_no" default="000187504512"/>
+  <arg name="enable_eih" default="true"/>
+  <arg name="enable_eob" default="true"/>
+  <arg name="depth_mode" default="NFOV_2X2BINNED"/>
+  <arg name="color_resolution" default="720P"/>
+  <arg name="fps" default="5"/>
+
+  <include file="$(find easy_handeye)/launch/publish_dual_inside_moveit.launch">
+    <arg name="enable_eih" value="$(arg enable_eih)"/>
+    <arg name="enable_eob" value="$(arg enable_eob)"/>
+    <arg name="eih_serial_no" value="$(arg eih_serial_no)"/>
+    <arg name="eob_serial_no" value="$(arg eob_serial_no)"/>
+    <arg name="depth_mode" value="$(arg depth_mode)"/>
+    <arg name="color_resolution" value="$(arg color_resolution)"/>
+    <arg name="fps" value="$(arg fps)"/>
+  </include>
+</launch>
