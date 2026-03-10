@@ -1,13 +1,11 @@
-Camera Calibration
 
-# IMPORTANT!! for both camera setup follow these steps:
+# Camera Calibration:
 
 1. Derivers and settings
 - Install K4a driver for kinect:
 <img width="2894" height="1472" alt="image" src="https://github.com/user-attachments/assets/8b71465d-d046-4f4d-9585-5a2cf3a8412f" />
 - Update GRUB usbfs limit:
 (https://github.com/microsoft/Azure_Kinect_ROS_Driver/issues/97):
-
 By default, Linux limits image capturing to a Max_value or 16 MB.
 In ( /etc/default/grub ), change ( GRUB_CMDLINE_LINUX_DEFAULT="quiet splash" ) to ==> ( GRUB_CMDLINE_LINUX_DEFAULT="quiet splash usbcore.usbfs_memory_mb=1000" ),
 Update the grup ( sudo update-grub ) and restart your PC ( sudo reboot ). Check ( cat /sys/module/usbcore/parameters/usbfs_memory_mb ) that it shows the new value.
