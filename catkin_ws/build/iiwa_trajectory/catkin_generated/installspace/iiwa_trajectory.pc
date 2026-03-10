@@ -1,8 +1,0 @@
-prefix=/home/aorta-scan/fyassine/auto_liver_ultrasound/catkin_ws/install
-
-Name: iiwa_trajectory
-Description: Description of iiwa_trajectory
-Version: 0.0.0
-Cflags: 
-Libs: -L${prefix}/lib 
-Requires: iiwa_msgs rosbag roscpp rospy sensor_msgs std_msgs geometry_msgs

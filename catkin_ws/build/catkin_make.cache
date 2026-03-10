@@ -1,2 +1,0 @@
-azure_kinect_ros_driver:easy_handeye/easy_handeye:easy_handeye/easy_handeye_msgs:easy_handeye/rqt_easy_handeye:iiwa_control:iiwa_description:iiwa_gazebo:iiwa_hw:iiwa_moveit:iiwa_msgs:iiwa_ros:iiwa_trajectory:iiwa_visualization
--DCATKIN_DEVEL_PREFIX=/home/aorta-scan/fyassine/auto_liver_ultrasound/catkin_ws/devel -DCMAKE_INSTALL_PREFIX=/home/aorta-scan/fyassine/auto_liver_ultrasound/catkin_ws/install -G Unix Makefiles
