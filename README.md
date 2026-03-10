@@ -39,6 +39,9 @@ Run the following command to verify the dual camera setup:
 roslaunch easy_handeye publish_dual_inside_moveit.launch enable_eob:=true enable_eih:=true
 ```
 
----
+<img width="3446" height="1544" alt="image" src="https://github.com/user-attachments/assets/0c442f07-7244-4494-8ffa-ed16f6eceeec" />
 
-**Would you like me to convert any of those file paths into environment variables or help you draft a troubleshooting section for common calibration errors?**
+
+# Microphone
+
+
