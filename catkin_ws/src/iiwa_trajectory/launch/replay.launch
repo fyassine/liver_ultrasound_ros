@@ -1,3 +1,4 @@
 <launch>
-    <node name="iiwa_trajectory_replayer" pkg="iiwa_trajectory" type="replay_trajectory.py" output="screen"/>
+    <arg name="bag" default="recorded_trajectory_iiwa.bag"/>
+    <node name="iiwa_trajectory_replayer" pkg="iiwa_trajectory" type="replay_trajectory.py" args="--bag $(arg bag)" output="screen"/>
 </launch>

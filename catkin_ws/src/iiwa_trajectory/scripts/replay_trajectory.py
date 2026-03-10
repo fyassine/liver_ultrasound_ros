@@ -1,15 +1,14 @@
 #!/usr/bin/env python3
 
+import argparse
 import os
-import sys
 import subprocess
+import sys
+
+from storage_paths import default_bag_path, resolve_bag_path
 
 def replay_trajectory(bag_file):
-    bags_dir = os.path.join(
-        os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
-        'bags'
-    )
-    bag_path = os.path.join(bags_dir, bag_file)
+    bag_path = resolve_bag_path(bag_file)
     
     if not os.path.exists(bag_path):
         print(f"Bag file not found: {bag_path}")
@@ -36,5 +35,8 @@ def replay_trajectory(bag_file):
         sys.exit(1)
 
 if __name__ == '__main__':
-    replay_trajectory("recorded_trajectory_iiwa.bag")
+    parser = argparse.ArgumentParser(description='Replay a recorded iiwa trajectory bag.')
+    parser.add_argument('--bag', '-b', default=default_bag_path('recorded_trajectory_iiwa.bag'), help='Bag file path or filename inside the project data folder')
+    args, _ = parser.parse_known_args()
+    replay_trajectory(args.bag)
 

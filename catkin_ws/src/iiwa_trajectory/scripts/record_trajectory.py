@@ -1,10 +1,14 @@
 #!/usr/bin/env python3
 
+import argparse
 import os
 import subprocess
 import sys
 
-def record_trajectory():
+from storage_paths import default_bag_path, ensure_recordings_dir
+
+
+def record_trajectory(iiwa_output_path=None, standard_output_path=None):
 
 
     republisher_script = os.path.join(os.path.dirname(__file__), 'topics_republisher.py')
@@ -28,15 +32,11 @@ def record_trajectory():
             '/iiwa/state/JointTorque_standard'
         ]
 
-        bags_dir = os.path.join(
-        os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
-            'bags'
-        )
-        os.makedirs(bags_dir, exist_ok=True)
+        ensure_recordings_dir()
         print(f"Recording. Press Ctrl+C to stop recording...")
 
-        iiwa_output_path = os.path.join(bags_dir, 'recorded_trajectory_iiwa.bag')
-        standard_output_path = os.path.join(bags_dir, 'recorded_trajectory_standard.bag')
+        iiwa_output_path = iiwa_output_path or default_bag_path('recorded_trajectory_iiwa.bag')
+        standard_output_path = standard_output_path or default_bag_path('recorded_trajectory_standard.bag')
 
         iiwa_cmd = ['rosbag', 'record', '-O', iiwa_output_path] + iiwa_topics
         standard_cmd = ['rosbag', 'record', '-O', standard_output_path] + standard_topics
@@ -56,4 +56,8 @@ def record_trajectory():
             standard_process.terminate()
 
 if __name__ == '__main__':
-    record_trajectory()
+    parser = argparse.ArgumentParser(description='Record iiwa trajectory bags.')
+    parser.add_argument('--iiwa-bag', default=None, help='Output path for raw iiwa trajectory bag')
+    parser.add_argument('--standard-bag', default=None, help='Output path for standard trajectory bag')
+    args, _ = parser.parse_known_args()
+    record_trajectory(args.iiwa_bag, args.standard_bag)

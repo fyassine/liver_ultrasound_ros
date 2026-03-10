@@ -1,11 +1,15 @@
 #!/usr/bin/env python3
 
+import argparse
 import os
 import subprocess
 import sys
 import time
 
-def record_joint_positions():
+from storage_paths import default_bag_path, ensure_recordings_dir
+
+
+def record_joint_positions(iiwa_output_path=None, standard_output_path=None):
     republisher_script = os.path.join(os.path.dirname(__file__), 'topics_republisher.py')
     republisher_process = subprocess.Popen(['python3', republisher_script])
 
@@ -14,15 +18,11 @@ def record_joint_positions():
         iiwa_topics = ['/iiwa/state/JointPosition']
         standard_topics = ['/iiwa/state/JointPosition_standard']
 
-        bags_dir = os.path.join(
-            os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
-            'bags'
-        )
-        os.makedirs(bags_dir, exist_ok=True)
+        ensure_recordings_dir()
         print(f"Recording joint positions. Press Ctrl+C to stop recording...")
 
-        iiwa_output_path = os.path.join(bags_dir, 'recorded_joint_positions_iiwa.bag')
-        standard_output_path = os.path.join(bags_dir, 'recorded_joint_positions_standard.bag')
+        iiwa_output_path = iiwa_output_path or default_bag_path('recorded_joint_positions_iiwa.bag')
+        standard_output_path = standard_output_path or default_bag_path('recorded_joint_positions_standard.bag')
 
         iiwa_cmd = ['rosbag', 'record', '-O', iiwa_output_path] + iiwa_topics
         standard_cmd = ['rosbag', 'record', '-O', standard_output_path] + standard_topics
@@ -42,4 +42,8 @@ def record_joint_positions():
             standard_process.terminate()
 
 if __name__ == '__main__':
-    record_joint_positions()
+    parser = argparse.ArgumentParser(description='Record iiwa joint-position bags.')
+    parser.add_argument('--iiwa-bag', default=None, help='Output path for raw iiwa joint bag')
+    parser.add_argument('--standard-bag', default=None, help='Output path for standard joint bag')
+    args, _ = parser.parse_known_args()
+    record_joint_positions(args.iiwa_bag, args.standard_bag)

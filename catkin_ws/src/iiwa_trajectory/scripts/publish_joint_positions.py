@@ -8,6 +8,8 @@ import time
 import subprocess
 import shutil
 
+from storage_paths import default_bag_path, resolve_bag_path
+
 try:
     import rospy
     import rosbag
@@ -15,11 +17,41 @@ except Exception:
     rospy = None
     rosbag = None
 
+try:
+    import rosbag.bag as rosbag_bag
+except Exception:
+    rosbag_bag = None
+
+try:
+    from iiwa_msgs.msg import JointPosition
+except Exception:
+    JointPosition = None
 
 
-DEFAULT_BAG = os.path.normpath(os.path.join(os.path.dirname(__file__), '..', 'bags', 'recorded_joint_positions.bag'))
+
+DEFAULT_BAG = default_bag_path('recorded_joint_positions_iiwa.bag')
 DEFAULT_READ_TOPIC = '/iiwa/state/JointPosition'
 DEFAULT_PUBLISH_TOPIC = '/iiwa/command/JointPosition'
+
+KNOWN_MESSAGE_TYPES = {
+    'iiwa_msgs/JointPosition': JointPosition,
+}
+
+
+def _patch_rosbag_message_resolution():
+    if rosbag_bag is None:
+        return None
+
+    original = rosbag_bag._get_message_type
+
+    def _resolve_message_type(info):
+        known_type = KNOWN_MESSAGE_TYPES.get(info.datatype)
+        if known_type is not None:
+            return known_type
+        return original(info)
+
+    rosbag_bag._get_message_type = _resolve_message_type
+    return original
 
 
 def publish_only_joints(bag_path, read_topic, publish_topic, speed=1.0, loop=False, verbose=False):
@@ -42,6 +74,7 @@ def publish_only_joints(bag_path, read_topic, publish_topic, speed=1.0, loop=Fal
         return 1
 
     pub = None
+    original_get_message_type = _patch_rosbag_message_resolution()
 
     try:
         while not rospy.is_shutdown():
@@ -49,7 +82,7 @@ def publish_only_joints(bag_path, read_topic, publish_topic, speed=1.0, loop=Fal
             for topic, msg, t in bag.read_messages(topics=[read_topic]):
                 if pub is None:
                     try:
-                        msg_type = msg.__class__
+                        msg_type = JointPosition or msg.__class__
                         pub = rospy.Publisher(publish_topic, msg_type, queue_size=10)
                         # small pause to allow registration
                         rospy.sleep(0.05)
@@ -90,6 +123,8 @@ def publish_only_joints(bag_path, read_topic, publish_topic, speed=1.0, loop=Fal
             if verbose:
                 print('Loop requested — restarting bag')
     finally:
+        if original_get_message_type is not None:
+            rosbag_bag._get_message_type = original_get_message_type
         try:
             bag.close()
         except Exception:
@@ -112,10 +147,10 @@ def main():
     else:
         args, _ = p.parse_known_args()
 
-    bag_path = args.bag
+    bag_path = resolve_bag_path(args.bag)
     if not os.path.exists(bag_path):
         print('Default bag not found at', bag_path)
-        print('Provide a bag path with --bag or place the default bag in src/iiwa_trajectory/bags/')
+        print('Provide a bag path with --bag or place the default bag in /home/aorta-scan/fyassine/auto_liver_ultrasound/data')
         sys.exit(1)
 
     if rospy is not None and rosbag is not None:
