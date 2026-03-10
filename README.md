@@ -1,20 +1,43 @@
+# Camera Calibration
 
-# Camera Calibration:
+### 1. Drivers and Settings
 
-1. Derivers and settings
-- Install K4a driver for kinect:
-<img width="2894" height="1472" alt="image" src="https://github.com/user-attachments/assets/8b71465d-d046-4f4d-9585-5a2cf3a8412f" />
-- Update GRUB usbfs limit:
-(https://github.com/microsoft/Azure_Kinect_ROS_Driver/issues/97):
-By default, Linux limits image capturing to a Max_value or 16 MB.
-In ( /etc/default/grub ), change ( GRUB_CMDLINE_LINUX_DEFAULT="quiet splash" ) to ==> ( GRUB_CMDLINE_LINUX_DEFAULT="quiet splash usbcore.usbfs_memory_mb=1000" ),
-Update the grup ( sudo update-grub ) and restart your PC ( sudo reboot ). Check ( cat /sys/module/usbcore/parameters/usbfs_memory_mb ) that it shows the new value.
+* **Install K4a driver for Kinect:**
+* **Update GRUB usbfs limit:**
+*(Reference: [Azure Kinect ROS Driver Issue #97](https://github.com/microsoft/Azure_Kinect_ROS_Driver/issues/97))*
+By default, Linux limits image capturing to a maximum of 16 MB. To increase this:
+1. Open `/etc/default/grub`.
+2. Change `GRUB_CMDLINE_LINUX_DEFAULT="quiet splash"` to:
+```bash
+GRUB_CMDLINE_LINUX_DEFAULT="quiet splash usbcore.usbfs_memory_mb=1000"
+```
+3. Update GRUB: `sudo update-grub`.
+4. Restart your PC: `sudo reboot`.
+5. Verify the change by running: `cat /sys/module/usbcore/parameters/usbfs_memory_mb` (it should return `1000`).
 
-2. Calibrate both cameras separately:
-- To find the correct serial number of eob or eih, use: k4aviewer (to view the camera video output) or also k4arecorder --list commands
-- Then, for example: roslaunch easy_handeye publish_eob_inside_moveit.launch sensor_sn:=000187504512 
-- Calibration files are stored under: /home/aorta-scan/.ros/easy_handeye/
-but the ones that are correct for the current setup are extra in: /home/aorta-scan/fyassine/auto_liver_ultrasound/catkin_ws/src/easy_handeye/easy_handeye/launch/calib_files
+### 2. Calibrate Cameras Separately
 
-3. Test cameras calibration inside moveit:
+* **Find Serial Numbers:** To find the correct serial number for **EOB** (eye-on-base) or **EIH** (eye-in-hand), use the `k4aviewer` GUI or run:
+```bash
+k4arecorder --list
+
+```
+* **Launch Calibration:** Use the serial number in the launch command:
+```bash
+roslaunch easy_handeye publish_eob_inside_moveit.launch sensor_sn:=000187504512
+```
+* **File Locations:**
+* **Default storage:** `/home/aorta-scan/.ros/easy_handeye/`
+* **Current setup files:** `/home/aorta-scan/fyassine/auto_liver_ultrasound/catkin_ws/src/easy_handeye/easy_handeye/launch/calib_files`
+
+### 3. Test Calibration in MoveIt
+
+Run the following command to verify the dual camera setup:
+
+```bash
 roslaunch easy_handeye publish_dual_inside_moveit.launch enable_eob:=true enable_eih:=true
+```
+
+---
+
+**Would you like me to convert any of those file paths into environment variables or help you draft a troubleshooting section for common calibration errors?**
