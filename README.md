@@ -3,7 +3,7 @@
 Connecting Robot to PC and PC to Internet:
 top port --> robot ethernet cable
 bottom port --> ethernet (see settings)
-<img width="774" height="110" alt="image" src="https://github.com/user-attachments/assets/8fc018a4-5702-4908-aba6-8188a7d7ac3d" />
+Beware of bandwith limitation of two kinect cameras running simultaneously: connect each two cables of each cameras separately (2 at the top PCIe and 2 at the bottom)
 
 <img width="1130" height="846" alt="image" src="https://github.com/user-attachments/assets/2c043130-ce78-4c95-8d98-d15a85aa4081" />
 
