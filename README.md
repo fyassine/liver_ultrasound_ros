@@ -45,12 +45,11 @@ roslaunch easy_handeye publish_dual_inside_moveit.launch enable_eob:=true enable
 
 
 # Microphone
-Run 
+Run to record the audio from the default microphone in the settings.
 
 ```bash
 roslaunch rear_mic_recorder record_rear_mic.launch
 ```
-to be able to record the audio from the default microphone in the settings.
 
 
 # iiwa Robot Joint Positions
