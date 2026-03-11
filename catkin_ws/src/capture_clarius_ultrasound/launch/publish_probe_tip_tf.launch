@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="parent_frame" default="iiwa_link_ee"/>
+  <arg name="child_frame" default="clarius_probe_tip"/>
+  <arg name="probe_length" default="0.25"/>
+  <arg name="x" default="0.0"/>
+  <arg name="y" default="0.0"/>
+  <arg name="roll" default="0.0"/>
+  <arg name="pitch" default="0.0"/>
+  <arg name="yaw" default="0.0"/>
+
+  <node name="clarius_probe_tip_tf" pkg="tf" type="static_transform_publisher"
+        args="$(arg x) $(arg y) $(arg probe_length) $(arg yaw) $(arg pitch) $(arg roll) $(arg parent_frame) $(arg child_frame) 30"/>
+</launch>

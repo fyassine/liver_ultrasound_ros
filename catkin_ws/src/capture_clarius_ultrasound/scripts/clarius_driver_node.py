@@ -67,7 +67,7 @@ import pyclariuscast
 
 
 import rospy
-from sensor_msgs.msg import Image as RosImage
+from sensor_msgs.msg import Image as RosImage, CameraInfo
 from std_msgs.msg import Float32, Empty
 
 # ----------------------------------------------------------------------
@@ -127,6 +127,7 @@ class RosClariusService:
         self._lock = threading.Lock()
 
         self._pub = rospy.Publisher("/clarius/bmode", RosImage, queue_size=10)
+        self._info_pub = rospy.Publisher("/clarius/camera_info", CameraInfo, queue_size=10)
 
         rospy.Subscriber("/clarius/tx_freq", Float32, self._cb_tx_freq)
         rospy.Subscriber("/clarius/tx_focus", Float32, self._cb_tx_focus)
@@ -185,9 +186,10 @@ class RosClariusService:
         if rospy.is_shutdown():
             return
 
+        # 1. Prepare Image Message
         msg = RosImage()
-
         msg.header.stamp = frame.timestamp
+        msg.header.frame_id = "clarius_probe"  # Added frame_id for RViz
 
         msg.height = frame.height
         msg.width = frame.width
@@ -196,7 +198,16 @@ class RosClariusService:
         msg.step = frame.step
         msg.data = frame.data
 
+        # 2. Prepare CameraInfo Message
+        info_msg = CameraInfo()
+        info_msg.header = msg.header  # Identical header links the messages
+        info_msg.width = frame.width
+        info_msg.height = frame.height
+
+        # 3. Publish Both
         self._pub.publish(msg)
+        self._info_pub.publish(info_msg)
+
         rospy.loginfo(
             f"Published frame ({frame.encoding}, {frame.width:d}x{frame.height:d}).")
 
