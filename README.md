@@ -88,7 +88,14 @@ When launching the clarius probe node, remember to run:
 ``bash
 export LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libffi.so.7
 ``
-<img width="1070" height="138" alt="image" src="https://github.com/user-attachments/assets/c0bbbff2-af9e-4f86-a1aa-ebff3c6acebf" />
+
+Use password "msot"
+Enable "Prefer Wireless LAN" and under "Clarius Cast" select "Research (5828)"
+When launching the clarius probe node, remember to run:
+``bash 
+export LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libffi.so.7
+```
+
 
 To record the probe video stram at 10 fps run:
 ```bash
