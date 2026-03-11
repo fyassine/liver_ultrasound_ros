@@ -3,7 +3,8 @@
 Connecting Robot to PC and PC to Internet:
 top port --> robot ethernet cable
 bottom port --> ethernet (see settings)
-Beware of bandwith limitation of two kinect cameras running simultaneously: connect each two cables of each cameras separately (2 at the top PCIe and 2 at the bottom)
+Beware of bandwith limitation of two kinect cameras running simultaneously. 
+Connect each two cables of each cameras separately (2 at the top PCIe and 2 at the bottom)
 
 <img width="1130" height="846" alt="image" src="https://github.com/user-attachments/assets/2c043130-ce78-4c95-8d98-d15a85aa4081" />
 
@@ -88,14 +89,6 @@ When launching the clarius probe node, remember to run:
 ``bash
 export LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libffi.so.7
 ``
-
-Use password "msot"
-Enable "Prefer Wireless LAN" and under "Clarius Cast" select "Research (5828)"
-When launching the clarius probe node, remember to run:
-``bash 
-export LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libffi.so.7
-```
-
 
 To record the probe video stram at 10 fps run:
 ```bash
