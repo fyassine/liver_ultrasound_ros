@@ -74,12 +74,23 @@ rostopic pub -r 10 /clarius/request_image std_msgs/Empty '{}'
 
 # Record the MCAP dataset
 
-In separate terminals run:
+In separate terminals in order run:
 
 ```bash
 roscore
 roslaunch easy_handeye publish_dual_inside_moveit.launch enable_eob:=true eih_serial_no:=000188401612 eob_serial_no:=000187504512
+rosrun capture_clarius_ultrasound clarius_driver_node.py --ip 10.23.0.73   --port 5828 
 rostopic pub -r 10 /clarius/request_image std_msgs/Empty '{}'
+```
+
+Then check inside Rviz if the nodes are publishing correctly.
+- /base_camera/rgb/image_raw
+- /hand_camera/rgb/image_raw
+- /clarius/bmode
+
+after that start the recording:
+
+```bash
 roslaunch mcap_dataset_recorder record_mcap_dataset.launch
 ```
 
