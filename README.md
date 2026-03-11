@@ -1,3 +1,4 @@
+Hardware Setup:
 ![IMG_6641](https://github.com/user-attachments/assets/accd4371-54d0-417c-9b82-95839678be0a)
 
 
