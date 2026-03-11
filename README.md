@@ -1,4 +1,4 @@
-# iiwa Robot Joint Positions
+# iiwa Robot Setup
 
 Connecting Robot to PC and PC to Internet:
 
@@ -98,6 +98,8 @@ To record the probe video stram at 10 fps run:
 rostopic pub -r 10 /clarius/request_image std_msgs/Empty '{}'
 ```
 
+
+-----------------------------------
 
 # Record the MCAP dataset
 
