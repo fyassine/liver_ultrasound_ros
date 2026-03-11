@@ -1,8 +1,10 @@
 # iiwa Robot Joint Positions
 
 Connecting Robot to PC and PC to Internet:
+
 top port --> robot ethernet cable
 bottom port --> ethernet (see settings)
+
 Beware of bandwith limitation of two kinect cameras running simultaneously. 
 Connect each two cables of each cameras separately (2 at the top PCIe and 2 at the bottom)
 
