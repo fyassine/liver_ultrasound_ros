@@ -49,6 +49,7 @@ roslaunch easy_handeye publish_dual_inside_moveit.launch enable_eob:=true eih_se
 
 
 # Microphone
+
 Run to record the audio from the default microphone in the settings.
 
 ```bash
@@ -77,6 +78,7 @@ roslaunch iiwa_trajectory replay_joint_positions.launch bag:=/home/aorta-scan/fy
 ```
 
 # Clarius ultrasound probe
+
 Use password "msot"
 Enable "Prefer Wireless LAN" and under "Clarius Cast" select "Research (5828)"
 When launching the clarius probe node, remember to run:
@@ -89,7 +91,6 @@ To record the probe video stram at 10 fps run:
 ```bash
 rostopic pub -r 10 /clarius/request_image std_msgs/Empty '{}'
 ```
-
 
 
 # Record the MCAP dataset
