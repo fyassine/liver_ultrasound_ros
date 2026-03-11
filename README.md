@@ -45,5 +45,21 @@ roslaunch easy_handeye publish_dual_inside_moveit.launch enable_eob:=true enable
 
 
 # Microphone
+Run ```bash
+roslaunch rear_mic_recorder record_rear_mic.launch
+```to be able to record the audio from the default microphone in the settings.
+
+# iiwa Robot Trajectory + Joints
+
+to record a trajectory with joint positions using the iiwa_msgs format: 
+```bash
+roslaunch iiwa_trajectory record_joint_positions.launch
+```
+
+to replay the trajectory
+```bash
+roslaunch iiwa_trajectory replay_joint_positions.launch bag:=/home/aorta-scan/fyassine/auto_liver_ultrasound/data/recorded_joint_positions_iiwa.bag
+```
+
 
 
