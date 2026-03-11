@@ -108,6 +108,7 @@ In separate terminals in order run:
 ```bash
 roscore
 roslaunch easy_handeye publish_dual_inside_moveit.launch enable_eob:=true eih_serial_no:=000188401612 eob_serial_no:=000187504512
+roslaunch capture_clarius_ultrasound publish_probe_tip_tf.launch
 rosrun capture_clarius_ultrasound clarius_driver_node.py --ip 10.23.0.73   --port 5828 
 rostopic pub -r 10 /clarius/request_image std_msgs/Empty '{}'
 ```
