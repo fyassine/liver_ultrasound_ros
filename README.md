@@ -53,14 +53,14 @@ roslaunch rear_mic_recorder record_rear_mic.launch
 to be able to record the audio from the default microphone in the settings.
 
 
-# iiwa Robot Trajectory + Joints
+# iiwa Robot Joint Positions
 
-to record a trajectory with joint positions using the iiwa_msgs format: 
+To record a trajectory with joint positions using the iiwa_msgs format: 
 ```bash
 roslaunch iiwa_trajectory record_joint_positions.launch
 ```
 
-to replay the trajectory
+To replay the trajectory
 ```bash
 roslaunch iiwa_trajectory replay_joint_positions.launch bag:=/home/aorta-scan/fyassine/auto_liver_ultrasound/data/recorded_joint_positions_iiwa.bag
 ```
