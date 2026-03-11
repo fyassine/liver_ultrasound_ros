@@ -1,3 +1,6 @@
+![IMG_6641](https://github.com/user-attachments/assets/accd4371-54d0-417c-9b82-95839678be0a)
+
+
 # iiwa Robot Setup
 
 Connecting Robot to PC and PC to Internet:
@@ -172,12 +175,13 @@ roslaunch mcap_dataset_recorder record_mcap_dataset.launch
 
 Run the following to record the audio from the default microphone in a separate file:
 
-What is missing:
-- Transformation from the ultrasound image to the pose of the robot
-- Distance between end-effector and center of the aruco marker
-- 
+
 
 ```bash
 roslaunch rear_mic_recorder record_rear_mic.launch
 
 ```
+
+What is missing:
+- Transformation from the ultrasound image to the pose of the robot
+- Distance between end-effector and center of the aruco marker
