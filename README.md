@@ -16,6 +16,10 @@ GRUB_CMDLINE_LINUX_DEFAULT="quiet splash usbcore.usbfs_memory_mb=1000"
 4. Restart your PC: `sudo reboot`.
 5. Verify the change by running: `cat /sys/module/usbcore/parameters/usbfs_memory_mb` (it should return `1000`).
 
+Beware of bandwith limitation of two kinect cameras running simultaneously: connect each two cables of each cameras separately (2 at the top PCIe and 2 at the bottom)
+<img width="1460" height="110" alt="image" src="https://github.com/user-attachments/assets/7c491acf-a149-49cb-82a9-5887faf8b179" />
+
+
 ### 2. Calibrate Cameras Separately (more details under: https://github.com/Chiararipiemon/IFL_calibration)
 
 * **Find Serial Numbers:** To find the correct serial number for **EOB** (eye-on-base) or **EIH** (eye-in-hand), use the `k4aviewer` GUI or run:
@@ -54,6 +58,14 @@ roslaunch rear_mic_recorder record_rear_mic.launch
 
 # iiwa Robot Joint Positions
 
+Connecting Robot to PC and PC to Internet:
+top port --> robot ethernet cable
+bottom port --> ethernet (see settings)
+<img width="774" height="110" alt="image" src="https://github.com/user-attachments/assets/8fc018a4-5702-4908-aba6-8188a7d7ac3d" />
+
+<img width="1130" height="846" alt="image" src="https://github.com/user-attachments/assets/2c043130-ce78-4c95-8d98-d15a85aa4081" />
+
+
 To record a trajectory with joint positions using the iiwa_msgs format: 
 ```bash
 roslaunch iiwa_trajectory record_joint_positions.launch
@@ -65,6 +77,14 @@ roslaunch iiwa_trajectory replay_joint_positions.launch bag:=/home/aorta-scan/fy
 ```
 
 # Clarius ultrasound probe
+Use password "msot"
+Enable "Prefer Wireless LAN" and under "Clarius Cast" select "Research (5828)"
+When launching the clarius probe node, remember to run:
+``bash
+export LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libffi.so.7
+``
+<img width="1070" height="138" alt="image" src="https://github.com/user-attachments/assets/c0bbbff2-af9e-4f86-a1aa-ebff3c6acebf" />
+
 To record the probe video stram at 10 fps run:
 ```bash
 rostopic pub -r 10 /clarius/request_image std_msgs/Empty '{}'
