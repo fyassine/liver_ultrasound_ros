@@ -64,5 +64,38 @@ To replay the trajectory
 roslaunch iiwa_trajectory replay_joint_positions.launch bag:=/home/aorta-scan/fyassine/auto_liver_ultrasound/data/recorded_joint_positions_iiwa.bag
 ```
 
+# Clarius ultrasound probe
+To record the probe video stram at 10 fps run:
+```bash
+rostopic pub -r 10 /clarius/request_image std_msgs/Empty '{}'
+```
 
 
+
+# Record the MCAP dataset
+
+In separate terminals run:
+
+```bash
+roscore
+roslaunch easy_handeye publish_dual_inside_moveit.launch enable_eob:=true eih_serial_no:=000188401612 eob_serial_no:=000187504512
+rostopic pub -r 10 /clarius/request_image std_msgs/Empty '{}'
+roslaunch mcap_dataset_recorder record_mcap_dataset.launch
+```
+
+The MCAP file contains:
+
+- /base_camera/rgb/image_raw
+- /base_camera/depth_to_rgb/image_raw
+- /hand_camera/rgb/image_raw
+- /hand_camera/depth_to_rgb/image_raw
+- /clarius/bmode
+- /iiwa/state/JointPosition
+- /iiwa/state/JointPosition_standard
+
+
+Run to record the audio from the default microphone in a separate file.
+
+```bash
+roslaunch rear_mic_recorder record_rear_mic.launch
+```
