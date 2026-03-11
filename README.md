@@ -3,6 +3,7 @@
 Connecting Robot to PC and PC to Internet:
 
 top port --> robot ethernet cable
+
 bottom port --> ethernet (see settings)
 
 Beware of bandwith limitation of two kinect cameras running simultaneously. 
