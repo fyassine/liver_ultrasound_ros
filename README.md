@@ -1,3 +1,24 @@
+# iiwa Robot Joint Positions
+
+Connecting Robot to PC and PC to Internet:
+top port --> robot ethernet cable
+bottom port --> ethernet (see settings)
+<img width="774" height="110" alt="image" src="https://github.com/user-attachments/assets/8fc018a4-5702-4908-aba6-8188a7d7ac3d" />
+
+<img width="1130" height="846" alt="image" src="https://github.com/user-attachments/assets/2c043130-ce78-4c95-8d98-d15a85aa4081" />
+
+
+To record a trajectory with joint positions using the iiwa_msgs format: 
+```bash
+roslaunch iiwa_trajectory record_joint_positions.launch
+```
+
+To replay the trajectory
+```bash
+roslaunch iiwa_trajectory replay_joint_positions.launch bag:=/home/aorta-scan/fyassine/auto_liver_ultrasound/data/recorded_joint_positions_iiwa.bag
+```
+
+
 # Camera Calibration
 
 ### 1. Drivers and Settings
@@ -57,25 +78,7 @@ roslaunch rear_mic_recorder record_rear_mic.launch
 ```
 
 
-# iiwa Robot Joint Positions
 
-Connecting Robot to PC and PC to Internet:
-top port --> robot ethernet cable
-bottom port --> ethernet (see settings)
-<img width="774" height="110" alt="image" src="https://github.com/user-attachments/assets/8fc018a4-5702-4908-aba6-8188a7d7ac3d" />
-
-<img width="1130" height="846" alt="image" src="https://github.com/user-attachments/assets/2c043130-ce78-4c95-8d98-d15a85aa4081" />
-
-
-To record a trajectory with joint positions using the iiwa_msgs format: 
-```bash
-roslaunch iiwa_trajectory record_joint_positions.launch
-```
-
-To replay the trajectory
-```bash
-roslaunch iiwa_trajectory replay_joint_positions.launch bag:=/home/aorta-scan/fyassine/auto_liver_ultrasound/data/recorded_joint_positions_iiwa.bag
-```
 
 # Clarius ultrasound probe
 
