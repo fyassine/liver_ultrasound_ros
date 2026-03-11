@@ -36,7 +36,7 @@ roslaunch easy_handeye publish_eob_inside_moveit.launch sensor_sn:=000187504512
 Run the following command to verify the dual camera setup:
 
 ```bash
-roslaunch easy_handeye publish_dual_inside_moveit.launch enable_eob:=true enable_eih:=true
+roslaunch easy_handeye publish_dual_inside_moveit.launch enable_eob:=true eih_serial_no:=000188401612 eob_serial_no:=000187504512
 ```
 
 <img width="3446" height="1544" alt="image" src="https://github.com/user-attachments/assets/0c442f07-7244-4494-8ffa-ed16f6eceeec" />
