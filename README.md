@@ -137,6 +137,11 @@ The MCAP file contains:
 
 Run to record the audio from the default microphone in a separate file.
 
+What is missing:
+- Transformation from the ultrasound image to the pose of the robot
+- Distance between end-effector and center of the aruco marker
+- 
+
 ```bash
 roslaunch rear_mic_recorder record_rear_mic.launch
 ```
