@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="output_dir" default="data/mcap_recordings"/>
+  <arg name="filename_prefix" default="mcap_dataset"/>
+  <arg name="filename" default=""/>
+  <arg name="recording_fps" default="0.0"/>
+  <arg name="spawn_joint_republisher" default="true"/>
+
+  <node pkg="mcap_dataset_recorder" type="record_mcap.py" name="mcap_dataset_recorder" output="screen">
+    <param name="output_dir" value="$(arg output_dir)"/>
+    <param name="filename_prefix" value="$(arg filename_prefix)"/>
+    <param name="filename" value="$(arg filename)"/>
+    <param name="recording_fps" value="$(arg recording_fps)"/>
+    <param name="spawn_joint_republisher" value="$(arg spawn_joint_republisher)"/>
+  </node>
+</launch>

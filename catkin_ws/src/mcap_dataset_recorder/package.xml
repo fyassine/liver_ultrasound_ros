@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>mcap_dataset_recorder</name>
+  <version>0.1.0</version>
+  <description>Record camera, ultrasound, and iiwa joint data to a single MCAP file.</description>
+
+  <maintainer email="user@example.com">User</maintainer>
+  <license>MIT</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <depend>rospy</depend>
+  <depend>sensor_msgs</depend>
+  <depend>iiwa_msgs</depend>
+  <depend>std_msgs</depend>
+</package>
