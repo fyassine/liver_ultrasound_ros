@@ -5,8 +5,10 @@
 
 ## Software Architecture:
 
-<img width="1751" height="659" alt="image" src="https://github.com/user-attachments/assets/d29f2d24-8932-47e7-8a29-c526bae2d358" />
+<img width="1721" height="628" alt="image" src="https://github.com/user-attachments/assets/2ff8f2dc-5a09-45c2-89f9-8d7009fb3d8f" />
 
+
+-------------
 
 # iiwa Robot Setup
 
@@ -136,7 +138,7 @@ rostopic pub -r 10 /clarius/request_image std_msgs/Empty '{}'
 
 ```
 
----
+
 
 -----------------------------------
 
