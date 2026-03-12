@@ -29,7 +29,9 @@ Connect each two cables of each cameras separately (2 at the top PCIe and 2 at t
 * **Top Port:** Robot ethernet cable
 * **Bottom Port:** Ethernet (see settings)
 
-![Robot Port Connection](https://github.com/user-attachments/assets/8fc018a4-5702-4908-aba6-8188a7d7ac3d)
+Ethernet (Connecting Robot to PC and PC to Internet): 
+top port --> robot ethernet cable
+bottom port --> ethernet (see settings)
 ![Network Settings](https://github.com/user-attachments/assets/2c043130-ce78-4c95-8d98-d15a85aa4081)
 
 **To record a trajectory with joint positions using the `iiwa_msgs` format:**
@@ -148,10 +150,6 @@ In separate terminals, run the following commands in order:
 
 ```bash
 roscore
-
-```
-
-```bash
 roslaunch easy_handeye publish_dual_inside_moveit.launch enable_eob:=true eih_serial_no:=000188401612 eob_serial_no:=000187504512
 roslaunch capture_clarius_ultrasound publish_probe_tip_tf.launch
 rosrun capture_clarius_ultrasound clarius_driver_node.py --ip 10.23.0.73   --port 5828 
