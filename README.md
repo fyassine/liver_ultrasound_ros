@@ -1,6 +1,6 @@
 ## Hardware Setup:
 
-![IMG_6641](https://github.com/user-attachments/assets/accd4371-54d0-417c-9b82-95839678be0a)
+<img width="2560" height="2054" alt="image" src="https://github.com/user-attachments/assets/4164b704-0fe6-403d-9a33-67aeb9fcf62e" />
 
 
 ## Software Architecture:
