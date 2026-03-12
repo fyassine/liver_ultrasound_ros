@@ -3,6 +3,11 @@
 ![IMG_6641](https://github.com/user-attachments/assets/accd4371-54d0-417c-9b82-95839678be0a)
 
 
+## Software Architecture:
+
+<img width="1751" height="659" alt="image" src="https://github.com/user-attachments/assets/d29f2d24-8932-47e7-8a29-c526bae2d358" />
+
+
 # iiwa Robot Setup
 
 Connecting Robot to PC and PC to Internet:
