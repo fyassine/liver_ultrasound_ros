@@ -18,20 +18,6 @@ top port --> robot ethernet cable
 
 bottom port --> ethernet (see settings)
 
-Beware of bandwith limitation of two kinect cameras running simultaneously. 
-Connect each two cables of each cameras separately (2 at the top PCIe and 2 at the bottom)
-
----
-
-## iiwa Robot Joint Positions
-
-### Connecting Robot to PC and PC to Internet
-* **Top Port:** Robot ethernet cable
-* **Bottom Port:** Ethernet (see settings)
-
-Ethernet (Connecting Robot to PC and PC to Internet): 
-top port --> robot ethernet cable
-bottom port --> ethernet (see settings)
 ![Network Settings](https://github.com/user-attachments/assets/2c043130-ce78-4c95-8d98-d15a85aa4081)
 
 **To record a trajectory with joint positions using the `iiwa_msgs` format:**
