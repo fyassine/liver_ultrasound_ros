@@ -10,7 +10,7 @@
 
 -------------
 
-# Building the project
+# Building the project (tested only on Ubuntu 20.04)
 
 ```bash
 cd catkin_ws
