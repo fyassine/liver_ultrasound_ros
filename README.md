@@ -10,6 +10,17 @@
 
 -------------
 
+# Building the project
+
+```bash
+cd catkin_ws
+catkin_make
+source devel/setup.bash
+```
+
+
+-------------
+
 # iiwa Robot Setup
 
 Connecting Robot to PC and PC to Internet:
